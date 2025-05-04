@@ -27,13 +27,13 @@
             <h2>you can click him for points</h2>
         </div>
         <script>
-            let valor = localStorage.getItem("valor") || 0;  // Recupera o valor salvo ou 0 se não houver
+            let valor = parseInt(localStorage.getItem("valor")) || 0;  // Garantindo que é um número
         
             function aumentarValor() {
               valor += 1;
               document.getElementById("contadas").textContent = valor;
 
-              localStorage.setItem("valor", valor);
+              localStorage.setItem("valor", valor.toString());
             }
           </script>
     </header>

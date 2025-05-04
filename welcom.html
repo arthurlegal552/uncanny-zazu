@@ -9,7 +9,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const valorSalvo = Number(localStorage.getItem("zaza", valorSalvo)) || 0;
+      const valorSalvo = localStorage.getItem("zaza")
       document.getElementById("outraTelaContador").textContent = valorSalvo;
     });
   </script>

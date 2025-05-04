@@ -31,19 +31,17 @@ img {
 }
 
 .estique {
-    width: 100px;
-    height: 100px;
-    background-color: tomato;
-    animation: esticarPraCima 1s infinite alternate;
+    width: 200px; /* ou o tamanho que quiser */
+    animation: esticarImagem 1s infinite alternate;
     transform-origin: bottom;
   }
   
-  @keyframes esticarPraCima {
+  @keyframes esticarImagem {
     0% {
       transform: scaleY(1);
     }
     100% {
-      transform: scaleY(1.5);
+      transform: scaleY(1.3); /* Aumenta 30% na altura */
     }
   }
   

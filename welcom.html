@@ -10,7 +10,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Recupera o valor salvo no localStorage
-            const valorSalvo = Number(localStorage.getItem("valor")) || 0;
+            const valorSalvo = parseInt(localStorage.getItem("valor")) || 0; // Certifica-se que é um número
             // Exibe o valor na página
             document.getElementById("outraTelaContador").textContent = valorSalvo;
         });

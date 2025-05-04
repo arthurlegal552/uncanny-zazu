@@ -32,6 +32,16 @@
             function aumentarValor() {
               valor += 1;
               document.getElementById("contadas").textContent = valor;
+
+
+                // Estica a imagem ao clicar
+                const imagem = document.querySelector(".estica");
+                imagem.style.transform = "scaleX(1.3)";
+                
+                // Volta ao normal após 0.3 segundos
+                setTimeout(() => {
+                    imagem.style.transform = "scaleX(1)";
+                }, 300);
             }
           </script>
     </header>

@@ -33,14 +33,14 @@
               valor += 1;
               document.getElementById("contadas").textContent = valor;
 
+              const imagem = document.querySelector(".estica");
 
-                // Estica a imagem ao clicar
-                const imagem = document.querySelector(".estica");
-                imagem.style.transform = "scaleX(1.3)";
-                
-                // Volta ao normal após 0.3 segundos
+                // Adiciona a classe que faz a imagem esticar
+                imagem.classList.add("esticada");
+
+                // Remove a classe depois de 0.3s para voltar ao normal
                 setTimeout(() => {
-                    imagem.style.transform = "scaleX(1)";
+                    imagem.classList.remove("esticada");
                 }, 300);
             }
           </script>

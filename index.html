@@ -10,32 +10,34 @@
     <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
-            <li><a href="welcom.html">store</a></li>
-            <li><a href="noo.html">actually dont click</a></li>
+            <li>
+                <a href="welcom.html">store</a>
+            </li>
+            <li>
+                <a href="noo.html">actually dont click</a>
+            </li>
         </ul>
     </nav>
     <header>
         <div class="center">
-            <img src="images/me.jpeg" alt="Clique aqui" width="200" class="estica" id="zazuBtn">
+            <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica">
         </div>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
         </div>
-    </header>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        <script>
+            // Sempre que a página carregar, pega o valor do localStorage
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
-
-            document.getElementById("zazuBtn").addEventListener("click", () => {
+        
+            function aumentarValor() {
                 valor += 1;
                 document.getElementById("contadas").textContent = valor;
-                localStorage.setItem("valor", valor);
-            });
-        });
-    </script>
+                localStorage.setItem("valor", valor); // Salva o novo valor
+            }
+        </script>
+        
+    </header>
 </body>
 </html>
-

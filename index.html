@@ -27,16 +27,17 @@
             <h2>you can click him for points</h2>
         </div>
         <script>
-            // Recupera o valor salvo ao carregar a página
+            // Sempre que a página carregar, pega o valor do localStorage
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
-    
+        
             function aumentarValor() {
                 valor += 1;
                 document.getElementById("contadas").textContent = valor;
-                localStorage.setItem("valor", valor); // Salva o valor atualizado
+                localStorage.setItem("valor", valor); // Salva o novo valor
             }
         </script>
+        
     </header>
 </body>
 </html>

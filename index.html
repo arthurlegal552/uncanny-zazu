@@ -27,16 +27,14 @@
             <h2>you can click him for points</h2>
         </div>
         <script>
-            // Recupera o valor salvo ou usa 0 se não houver
-            let valor = parseInt(localStorage.getItem("valor")) || 0; 
-            // Exibe o valor na página ao carregar
-            document.getElementById("contadas").textContent = valor; 
-
-            // Função para aumentar o valor
+            // Recupera o valor salvo ao carregar a página
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            document.getElementById("contadas").textContent = valor;
+    
             function aumentarValor() {
-                valor += 1; // Aumenta o valor
-                document.getElementById("contadas").textContent = valor; // Atualiza a tela
-                localStorage.setItem("valor", valor); // Salva o valor no localStorage
+                valor += 1;
+                document.getElementById("contadas").textContent = valor;
+                localStorage.setItem("valor", valor); // Salva o valor atualizado
             }
         </script>
     </header>

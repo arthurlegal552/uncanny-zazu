@@ -30,7 +30,7 @@ img {
     text-align: center;
 }
 
-.estique {
+.estica {
     width: 200px; /* ou o tamanho que quiser */
     animation: esticarImagem 1s infinite alternate;
     transform-origin: bottom;

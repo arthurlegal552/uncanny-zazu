@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>zazu clicker</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <p>zaza: <span id="contadas">0</span></p>
@@ -26,13 +27,16 @@
             <h2>you can click him for points</h2>
         </div>
         <script>
-            let valor = parseInt(localStorage.getItem("valor")) || 0; // Recupera o valor ou usa 0 se não houver
-            document.getElementById("contadas").textContent = valor; // Exibe o valor na tela
+            // Recupera o valor salvo ou usa 0 se não houver
+            let valor = parseInt(localStorage.getItem("valor")) || 0; 
+            // Exibe o valor na página ao carregar
+            document.getElementById("contadas").textContent = valor; 
 
+            // Função para aumentar o valor
             function aumentarValor() {
                 valor += 1; // Aumenta o valor
-                document.getElementById("contadas").textContent = valor; // Atualiza o contador na tela
-                localStorage.setItem("valor", valor); // Salva o novo valor no localStorage
+                document.getElementById("contadas").textContent = valor; // Atualiza a tela
+                localStorage.setItem("valor", valor); // Salva o valor no localStorage
             }
         </script>
     </header>

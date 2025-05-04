@@ -25,6 +25,10 @@
     </div>
     <div class="debbie">debbie:6000 zazas</div>
     <script>
+        let valor = parseInt(localStorage.getItem("valor")) || 0; 
+            // Exibe o valor na página ao carregar
+            document.getElementById("contadas").textContent = valor; 
+
         function buy() {
         valor += 6000; // Aumenta o valor
         document.getElementById("contadas").textContent = valor; // Atualiza a tela

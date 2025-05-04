@@ -17,12 +17,19 @@
         });
     </script>
     <div class="vendedor">
-        <img src="images/zazu guy.jpg" alt="fella">
+        <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
     <div class="texthat"><h1>what do you want sir</h1></div>
     <div class="debbieimg">
         <img src="images/debbie.png" alt="scarys">
     </div>
-    <div class="debbie">debbie</div>
+    <div class="debbie">debbie:6000 zazas</div>
+    <script>
+        function buy() {
+        valor += 6000; // Aumenta o valor
+        document.getElementById("contadas").textContent = valor; // Atualiza a tela
+        localStorage.setItem("valor", valor); // Salva o valor no localStorage
+    }
+    </script>
 </body>
 </html>

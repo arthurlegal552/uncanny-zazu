@@ -5,11 +5,11 @@
   <title>Zazu Store</title>
 </head>
 <body>
-  <p>Seus zazas: <span id="outraTelaContador">0</span></p>
+  <p>zazas: <span id="outraTelaContador">0</span></p>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const valorSalvo = Number(localStorage.getItem("zaza")) || 0;
+      const valorSalvo = Number(localStorage.getItem("zaza", valorSalvo)) || 0;
       document.getElementById("outraTelaContador").textContent = valorSalvo;
     });
   </script>

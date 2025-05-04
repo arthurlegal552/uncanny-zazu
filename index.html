@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>zazu baseball</title>
+    <title>zazu clicker</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -11,12 +11,12 @@
     <nav>
         <ul>
             <li>
-                <a href="welcom.html">welcom</a>
+                <a href="welcom.html">store</a>
             </li>
-            <li>
-                <a href="noo.html">actually dont click</a>
-            </li>
-        </ul>
+                <li>
+                    <a href="noo.html">actually dont click</a>
+                </li>
+                </ul>
     </nav>
     <header>
         <div class="center">
@@ -27,23 +27,13 @@
             <h2>you can click him for points</h2>
         </div>
         <script>
-            let valor = 0;
-
+            let valor = localStorage.getItem("valor") || 0;  // Recupera o valor salvo ou 0 se não houver
+        
             function aumentarValor() {
-                valor += 1;
-                document.getElementById("contadas").textContent = valor;
-
-                const imagem = document.querySelector(".estica");
-
-                // Adiciona a classe que faz a imagem esticar
-                imagem.classList.add("esticada");
-
-                // Remove a classe depois de 0.3s para voltar ao normal
-                setTimeout(() => {
-                    imagem.classList.remove("esticada");
-                }, 300);
+              valor += 1;
+              document.getElementById("contadas").textContent = valor;
             }
-        </script>
+          </script>
     </header>
 </body>
 </html>

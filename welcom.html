@@ -30,7 +30,7 @@
             document.getElementById("contadas").textContent = valor; 
 
         function buy() {
-        valor += 6000; // Aumenta o valor
+        valor -= 6000; // Aumenta o valor
         document.getElementById("contadas").textContent = valor; // Atualiza a tela
         localStorage.setItem("valor", valor); // Salva o valor no localStorage
     }

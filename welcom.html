@@ -6,34 +6,45 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <!-- Exibe o valor de zazas -->
     <p>Seus zazas: <span id="outraTelaContador">0</span></p>
 
     <script>
+        // Ao carregar a página, recupera o valor salvo no localStorage
         document.addEventListener("DOMContentLoaded", () => {
-            // Recupera o valor salvo no localStorage
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0; // Certifica-se que é um número
             // Exibe o valor na página
             document.getElementById("outraTelaContador").textContent = valorSalvo;
         });
     </script>
+
+    <!-- Imagem do vendedor com a função de compra -->
     <div class="vendedor">
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
-    <div class="texthat"><h1>what do you want sir</h1></div>
+    <div class="texthat"><h1>What do you want, sir?</h1></div>
+
+    <!-- Produto a ser comprado -->
     <div class="debbieimg">
         <img src="images/debbie.png" alt="scarys">
     </div>
-    <div class="debbie">debbie:6000 zazas</div>
-    <script>
-        let valor = parseInt(localStorage.getItem("valor")) || 0; 
-            // Exibe o valor na página ao carregar
-            document.getElementById("contadas").textContent = valor; 
+    <div class="debbie">Debbie: 6000 zazas</div>
 
+    <script>
+        // Função de compra que aumenta o valor de zazas
         function buy() {
-        valor -= 6000; // Aumenta o valor
-        document.getElementById("contadas").textContent = valor; // Atualiza a tela
-        localStorage.setItem("valor", valor); // Salva o valor no localStorage
-    }
+            // Recupera o valor salvo no localStorage
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            
+            // Aumenta o valor de zazas após a compra
+            valor -= 6000; 
+
+            // Atualiza o contador na página
+            document.getElementById("outraTelaContador").textContent = valor; 
+
+            // Salva o novo valor no localStorage
+            localStorage.setItem("valor", valor);
+        }
     </script>
 </body>
 </html>

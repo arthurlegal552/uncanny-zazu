@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
             <li>
@@ -19,12 +20,20 @@
     </nav>
     <header>
         <div class="center">
-            <img src="./images/me.jpeg"></img>    
+            <img src="imagem.jpg" alt="Clique aqui" width="200" onclick="aumentarValor()">
         </div>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
         </div>
+        <script>
+            let valor = 0;
+        
+            function aumentarValor() {
+              valor += 1;
+              document.getElementById("contadas").textContent = valor;
+            }
+          </script>
     </header>
 </body>
 </html>

@@ -26,21 +26,37 @@
 
     <!-- Produto a ser comprado -->
     <div class="debbieimg">
-        <img src="images/debbie.png" alt="scarys">
+        <!-- Agora a imagem de Debbie tem um evento de clique -->
+        <img src="images/debbie.png" alt="scarys" onclick="buyDebbie()">
     </div>
     <div class="debbie">Debbie: 6000 zazas</div>
 
     <script>
-        // Função de compra que aumenta o valor de zazas
+        // Função de compra de Zazu (aumenta o valor de zazas)
         function buy() {
             // Recupera o valor salvo no localStorage
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             
             // Aumenta o valor de zazas após a compra
-            valor -= 6000; 
+            valor += 6000; 
 
             // Atualiza o contador na página
             document.getElementById("outraTelaContador").textContent = valor; 
+
+            // Salva o novo valor no localStorage
+            localStorage.setItem("valor", valor);
+        }
+
+        // Função de compra para Debbie (aumenta o valor de zazas)
+        function buyDebbie() {
+            // Recupera o valor salvo no localStorage
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+
+            // Aumenta o valor de zazas após a compra
+            valor -= 6000;
+
+            // Atualiza o contador na página
+            document.getElementById("outraTelaContador").textContent = valor;
 
             // Salva o novo valor no localStorage
             localStorage.setItem("valor", valor);

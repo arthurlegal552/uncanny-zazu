@@ -1,5 +1,5 @@
 body {
-    color: white;
+    color: black;
     background-color: blanchedalmond;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -13,7 +13,7 @@ ul {
 }
 
 a {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 
@@ -29,3 +29,21 @@ img {
 .text {
     text-align: center;
 }
+
+.estique {
+    width: 100px;
+    height: 100px;
+    background-color: tomato;
+    animation: esticarPraCima 1s infinite alternate;
+    transform-origin: bottom;
+  }
+  
+  @keyframes esticarPraCima {
+    0% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(1.5);
+    }
+  }
+  

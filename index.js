@@ -1,13 +1,8 @@
-// Recupera o valor de 'zaza' salvo no LocalStorage
-let valorZaza = localStorage.getItem("valor");
+let valor = Number(localStorage.getItem("zaza")) || 0;
+document.getElementById("contadas").textContent = valor;
 
-// Se não houver valor, define como 0
-if (valorZaza === null) {
-    valorZaza = 0;
-}
-
-// Agora você pode usar o valorZaza para qualquer lógica, como exibir ou manipular
-console.log("Valor de zaza:", valorZaza);
-
-// Exemplo: Atualizando a quantidade em outra página
-document.getElementById("outraTelaContador").textContent = valorZaza;
+document.getElementById("zazu").addEventListener("click", () => {
+  valor++;
+  localStorage.setItem("zaza", valor);
+  document.getElementById("contadas").textContent = valor;
+});

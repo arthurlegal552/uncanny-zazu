@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>store!!!!!</title>
+  <title>Zazu Store</title>
 </head>
 <body>
-  <p>your zazas: <span id="outraTelaContador"></span></p>
+  <p>Seus zazas: <span id="outraTelaContador">0</span></p>
 
   <script>
-    // Espera o carregamento da página
     document.addEventListener("DOMContentLoaded", () => {
-      const valorSalvo = Number(localStorage.getItem("valor")) || 0;
+      const valorSalvo = Number(localStorage.getItem("zaza")) || 0;
       document.getElementById("outraTelaContador").textContent = valorSalvo;
     });
   </script>

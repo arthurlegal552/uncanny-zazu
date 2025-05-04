@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Zazu Store</title>
+    <meta charset="UTF-8">
+    <title>Zazu Store</title>
 </head>
 <body>
-  <p>zazas: <span id="outraTelaContador">0</span></p>
+    <p>Seus zazas: <span id="outraTelaContador">0</span></p>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const valorSalvo = Number(localStorage.getItem("zaza")) || 0;
-      document.getElementById("outraTelaContador").textContent = valorSalvo;
-    });
-  </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Recupera o valor salvo no localStorage
+            const valorSalvo = Number(localStorage.getItem("valor")) || 0;
+            // Exibe o valor na página
+            document.getElementById("outraTelaContador").textContent = valorSalvo;
+        });
+    </script>
 </body>
 </html>

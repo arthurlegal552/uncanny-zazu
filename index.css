@@ -24,7 +24,6 @@ img {
 
 .center {
     text-align: center;
-    cursor: pointer;
 }
 
 .text {
@@ -35,6 +34,7 @@ img {
     width: 200px; /* ou o tamanho que quiser */
     animation: esticarImagem 1s infinite alternate;
     transform-origin: bottom;
+    cursor: pointer;
   }
   
   @keyframes esticarImagem {

@@ -30,10 +30,6 @@ img {
     text-align: center;
 }
 
-.vendedor {
-  text-align: center;
-}
-
 .estica {
     width: 200px; /* ou o tamanho que quiser */
     animation: esticarImagem 1s infinite alternate;
@@ -105,6 +101,7 @@ img {
 .vendedor {
   position: relative;
   display: inline-block;
+  text-align: center;
 }
 
 .vendedorestica {

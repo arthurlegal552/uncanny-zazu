@@ -42,6 +42,29 @@
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
         });
+
+        function createMoneyEffect() {
+            const vendedor = document.querySelector('.vendedor');
+            for (let i = 0; i < 10; i++) {
+                const money = document.createElement('div');
+                money.className = 'money-effect';
+                
+                // Random position around the vendor
+                const x = Math.random() * 100 - 50;
+                const y = Math.random() * 100 - 50;
+                
+                money.style.left = `calc(50% + ${x}px)`;
+                money.style.top = `calc(50% + ${y}px)`;
+                money.style.animationDelay = `${i * 0.1}s`;
+                
+                vendedor.appendChild(money);
+                
+                // Remove the element after animation
+                setTimeout(() => {
+                    money.remove();
+                }, 1000);
+            }
+        }
     
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
@@ -56,6 +79,8 @@
                 dialogo.textContent = "thank you"
 
                 img.classList.add("vendedorestica");
+
+                createMoneyEffect();
 
                 // Remove a classe após a animação para permitir reuso
                 setTimeout(() => {

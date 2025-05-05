@@ -77,3 +77,43 @@ img {
 .vendedorestica {
     animation: esticaVendedor 0.4s ease;
 }
+
+/* Add this new CSS for the money effects */
+.money-effect {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-image: url('images/me.jpeg'); /* You'll need a money image */
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 100;
+  animation: float-up 1s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+  }
+  100% {
+      transform: translate(random(100) - 50px, -100px) rotate(360deg);
+      opacity: 0;
+  }
+}
+
+.vendedor {
+  position: relative;
+  display: inline-block;
+}
+
+.vendedorestica {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}

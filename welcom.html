@@ -45,13 +45,12 @@
     
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
-            if (valor != 6000) {
+            if (valor < 6000) {
                 alert("you dont have zazas");
-                valor = parseInt(localStorage.getItem("valor")) || 0;
+                valor +=0;
+                return;
             }
-            if (valor = 6000) {
                 valor -=6000;
-            }
             localStorage.setItem("valor", valor);
             document.getElementById("outraTelaContador").textContent = valor;
         }

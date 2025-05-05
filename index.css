@@ -101,6 +101,7 @@ img {
 
 /* Money Effects */
 /* Money Leak Effect */
+/* Money Falling Effect */
 .money-effect {
   position: absolute;
   width: 30px;
@@ -110,19 +111,26 @@ img {
   background-repeat: no-repeat;
   pointer-events: none;
   z-index: 100;
-  animation: money-leak 1.5s ease-out forwards;
+  animation: money-fall 1s ease-in forwards;
+  transform-origin: center;
 }
 
-@keyframes money-leak {
+@keyframes money-fall {
   0% {
     transform: translate(0, 0) rotate(0deg);
     opacity: 1;
   }
-  30% {
-    transform: translate(var(--leak-x), var(--leak-y)) rotate(0deg);
+  20% {
+    transform: translate(var(--fall-x1), var(--fall-y1)) rotate(90deg);
+  }
+  40% {
+    transform: translate(var(--fall-x2), var(--fall-y2)) rotate(180deg);
+  }
+  60% {
+    transform: translate(var(--fall-x3), var(--fall-y3)) rotate(270deg);
   }
   100% {
-    transform: translate(var(--leak-x), calc(var(--leak-y) + 100px)) rotate(360deg);
+    transform: translate(var(--fall-x4), var(--fall-y4)) rotate(360deg);
     opacity: 0;
   }
 }

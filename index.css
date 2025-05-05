@@ -100,6 +100,7 @@ img {
 }
 
 /* Money Effects */
+/* Money Leak Effect */
 .money-effect {
   position: absolute;
   width: 30px;
@@ -109,16 +110,33 @@ img {
   background-repeat: no-repeat;
   pointer-events: none;
   z-index: 100;
-  animation: float-up 1s ease-out forwards;
+  animation: money-leak 1.5s ease-out forwards;
 }
 
-@keyframes float-up {
+@keyframes money-leak {
   0% {
-      transform: translate(0, 0) rotate(0deg);
-      opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(var(--leak-x), var(--leak-y)) rotate(0deg);
   }
   100% {
-      transform: translate(calc(var(--random-x) * 1px), -100px) rotate(360deg);
-      opacity: 0;
+    transform: translate(var(--leak-x), calc(var(--leak-y) + 100px)) rotate(360deg);
+    opacity: 0;
   }
+}
+
+.vendedor {
+  position: relative;
+  display: inline-block;
+  overflow: visible; /* Allows money to spill out */
+}
+
+/* Make the vendor container wider to contain the leak */
+.vendedor-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 20px; /* Gives space for money to leak */
 }

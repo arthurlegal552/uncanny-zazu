@@ -52,6 +52,7 @@ img {
 
 .debbie {
   text-align: right;
+  cursor: pointer;
 }
 
 .debbieimg {
@@ -99,7 +100,6 @@ animation: float-up 1s ease-out forwards;
 }
 
 .vendedor {
-position: relative;
 display: inline-block;
 text-align: center;
 }

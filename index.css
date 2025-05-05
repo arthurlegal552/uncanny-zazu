@@ -67,7 +67,7 @@ img {
         transform: scaleX(1) scaleY(1);
     }
     50% {
-        transform: scaleX(1.9) scaleY(0.9);
+        transform: scaleX(1.9) scaleY(1.9);
     }
     100% {
       transform: scaleX(1) scaleY(1);

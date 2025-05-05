@@ -64,16 +64,13 @@ img {
 
   @keyframes esticaVendedor {
     0% {
-        transform: scaleX(1);
-        transform: scaleY(1); /* Aumenta 30% na altura */
+        transform: scaleX(1) scaleY(1);
     }
     50% {
-        transform: scaleY(0.9); /* Aumenta 30% na altura */
-        transform: scaleX(1.9);
+        transform: scaleX(1.9) scaleY(0.9);
     }
     100% {
-        transform: scaleY(1); /* Aumenta 30% na altura */
-        transform: scaleX(1);
+      transform: scaleX(1) scaleY(1);
     }
 }
 

@@ -93,12 +93,12 @@ function buyDebbie() {
     const dialogo = document.querySelector(".texthat h1");
     const img = document.querySelector(".vendedor img");
     
-    if (valor < 6000) {
+    if (valor < 10) {
         dialogo.textContent = "you dont have enough zazas";
         return;
     }
     
-    valor -= 6000;
+    valor -= 10;
     dialogo.textContent = "thank you";
     
     img.classList.add("vendedorestica");

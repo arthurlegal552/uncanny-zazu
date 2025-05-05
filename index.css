@@ -59,67 +59,85 @@ img {
   cursor: pointer;
 }
 
-@keyframes esticaVendedor {
+/* Money Falling Physics */
+.money-coin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-image: url('images/me.jpeg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 100;
+  animation: money-fall 1s forwards;
+  transform-origin: center;
+  bottom: 0;
+  left: 50%;
+}
+
+@keyframes money-fall {
   0% {
-      transform: scaleX(1) scaleY(1);
+    transform: translate(-50%, 0) rotate(0deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
   }
-  50% {
-      transform: scaleX(1.9) scaleY(1.3);
+  20% {
+    transform: translate(calc(-50% + 10px), -30px) rotate(90deg);
+    animation-timing-function: ease-in;
+  }
+  40% {
+    transform: translate(calc(-50% - 15px), -80px) rotate(180deg);
+    animation-timing-function: ease-out;
+  }
+  60% {
+    transform: translate(calc(-50% + 5px), -150px) rotate(270deg);
+    animation-timing-function: ease-in;
+  }
+  80% {
+    transform: translate(calc(-50% - 10px), -200px) rotate(340deg);
+    animation-timing-function: ease-out;
   }
   100% {
-    transform: scaleX(1) scaleY(1);
+    transform: translate(calc(-50% + 5px), -250px) rotate(360deg);
+    opacity: 0;
   }
 }
 
-.vendedorestica {
-  animation: esticaVendedor 0.4s ease;
-}
-
-/* Add this new CSS for the money effects */
-.money-effect {
-position: absolute;
-width: 30px;
-height: 30px;
-background-image: url('images/me.jpeg'); /* You'll need a money image */
-background-size: contain;
-background-repeat: no-repeat;
-pointer-events: none;
-z-index: 100;
-animation: float-up 1s ease-out forwards;
-}
-
-@keyframes float-up {
-0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-}
-100% {
-    transform: translate(random(100) - 50px, -100px) rotate(360deg);
-    opacity: 0;
-}
-}
-
-.vendedor {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  height: 150px;
-  width: 150px;
-}
-
+/* Enhanced Shake + Spin Animation */
 @keyframes shake-spin {
   0%, 100% { 
     transform: translateX(0) rotate(0deg); 
   }
   25% { 
-    transform: translateX(-5px) rotate(-5deg); 
+    transform: translateX(-8px) rotate(-8deg); 
   }
   50% { 
-    transform: translateX(5px) rotate(5deg); 
+    transform: translateX(8px) rotate(8deg); 
   }
   75% { 
     transform: translateX(-5px) rotate(-5deg); 
   }
+}
+
+.vendedorestica {
+  animation: 
+    shake-spin 0.4s ease-in-out,
+    /* Subtle scale pulse */
+    scale-pulse 0.4s ease-in-out;
+}
+
+@keyframes scale-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Vendor Container - ensures proper money positioning */
+.vendedor {
+  position: relative;
+  display: inline-block;
+  height: 150px;
+  width: 150px;
+  overflow: visible;
 }
 
 /* Apply it to your element */

@@ -45,12 +45,23 @@
     
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
+            const dialogo = document.querySelector(".texthat h1");
+            const img = document.querySelector(".vendedor img");
             if (valor < 6000) {
-                alert("you dont have zazas");
+                dialogo.textContent = "you dont have enough zazas"
                 valor +=0;
                 return;
             }
                 valor -=6000;
+                dialogo.textContent = "thank you"
+
+                img.classList.add("vendedor-estica");
+
+                // Remove a classe após a animação para permitir reuso
+                setTimeout(() => {
+                vendedorImg.classList.remove("vendedor-estica");
+    }, 400); // igual à duração da animação
+                
             localStorage.setItem("valor", valor);
             document.getElementById("outraTelaContador").textContent = valor;
         }

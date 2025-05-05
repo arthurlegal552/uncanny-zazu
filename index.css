@@ -67,6 +67,7 @@ img {
         transform: scaleX(1);
     }
     50% {
+        transform: scaleY(1.6); /* Aumenta 30% na altura */
         transform: scaleX(1.9);
     }
     100% {

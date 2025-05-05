@@ -30,6 +30,10 @@ img {
     text-align: center;
 }
 
+.vendedor {
+  text-align: center;
+}
+
 .estica {
     width: 200px; /* ou o tamanho que quiser */
     animation: esticarImagem 1s infinite alternate;
@@ -44,10 +48,6 @@ img {
     100% {
       transform: scaleY(1.3); /* Aumenta 30% na altura */
     }
-  }
-
-  .vendedor {
-    text-align: center;
   }
 
   .texthat {

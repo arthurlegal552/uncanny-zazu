@@ -28,7 +28,7 @@
         </div>
         <script>
             // Sempre que a página carregar, pega o valor do localStorage
-            let valor = parseInt(localStorage.getItem("valor")) || 6000;
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
         
             function aumentarValor() {

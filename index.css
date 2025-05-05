@@ -77,19 +77,27 @@ img {
   cursor: pointer;
 }
 
-@keyframes esticarImagem {
-  0% { transform: scaleY(1); }
-  100% { transform: scaleY(1.3); }
+debbie-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 800px;
+  margin: 20px auto;
+  padding-right: 20px;
 }
 
+.debbieimg {
+  text-align: right;
+}
+
+.debbie {
+  text-align: right;
+  margin-top: 5px;
+}
+
+/* Animations */
 .vendedorestica {
-  animation: esticaVendedor 0.4s ease, shake 0.4s ease-in-out;
-}
-
-@keyframes esticaVendedor {
-  0% { transform: scaleX(1) scaleY(1); }
-  50% { transform: scaleX(1.9) scaleY(1.3); }
-  100% { transform: scaleX(1) scaleY(1); }
+  animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
@@ -97,54 +105,4 @@ img {
   25% { transform: translateX(-5px); }
   50% { transform: translateX(5px); }
   75% { transform: translateX(-5px); }
-}
-
-/* Money Effects */
-/* Money Leak Effect */
-/* Money Falling Effect */
-.money-effect {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-image: url('images/me.jpeg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 100;
-  animation: money-fall 1s ease-in forwards;
-  transform-origin: center;
-}
-
-@keyframes money-fall {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-  }
-  20% {
-    transform: translate(var(--fall-x1), var(--fall-y1)) rotate(90deg);
-  }
-  40% {
-    transform: translate(var(--fall-x2), var(--fall-y2)) rotate(180deg);
-  }
-  60% {
-    transform: translate(var(--fall-x3), var(--fall-y3)) rotate(270deg);
-  }
-  100% {
-    transform: translate(var(--fall-x4), var(--fall-y4)) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.vendedor {
-  position: relative;
-  display: inline-block;
-  overflow: visible; /* Allows money to spill out */
-}
-
-/* Make the vendor container wider to contain the leak */
-.vendedor-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-  padding: 20px; /* Gives space for money to leak */
 }

@@ -64,7 +64,7 @@ img {
 }
 
 .vendedorestica {
-animation: shake 2s ease-in-out;
+animation: shake  0.4s infinite ease-in-out;
 transform-origin: bottom;
 width: 200px; /* ou o tamanho que quiser */
 }

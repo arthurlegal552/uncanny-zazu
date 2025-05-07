@@ -23,6 +23,9 @@
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
     <div class="texthat"><h1>What do you want, sir?</h1></div>
+    <div class="gif" id="monys">
+        <img src="images/jackpot.gif" alt="money wow">
+    </div>
 
     <nav>
         <ul>
@@ -42,34 +45,12 @@
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
         });
-
-        function createMoneyEffect() {
-            const vendedor = document.querySelector('.vendedor');
-            for (let i = 0; i < 10; i++) {
-                const money = document.createElement('div');
-                money.className = 'money-effect';
-                
-                // Random position around the vendor
-                const x = Math.random() * 100 - 50;
-                const y = Math.random() * 100 - 50;
-                
-                money.style.left = `calc(50% + ${x}px)`;
-                money.style.top = `calc(50% + ${y}px)`;
-                money.style.animationDelay = `${i * 0.1}s`;
-                
-                vendedor.appendChild(money);
-                
-                // Remove the element after animation
-                setTimeout(() => {
-                    money.remove();
-                }, 1000);
-            }
-        }
     
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             const dialogo = document.querySelector(".texthat h1");
             const img = document.querySelector(".vendedor img");
+            const gif = document.querySelector("monys");
             if (valor < 10) {
                 dialogo.textContent = "you dont have enough zazas"
                 valor +=0;
@@ -80,10 +61,11 @@
 
                 img.classList.add("vendedorestica");
 
-                createMoneyEffect();
+                gif.style.display = "block";
 
                 // Remove a classe após a animação para permitir reuso
                 setTimeout(() => {
+                    gif.style.display = "none";
                 vendedorImg.classList.remove("vendedorestica");
     }, 400); // igual à duração da animação
                 

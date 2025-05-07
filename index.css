@@ -61,7 +61,7 @@ img {
 
 @keyframes esticaVendedor {
   0% {
-    transform: scaleY(1);
+    transform: rotate(0deg);
   }
   100% {
     transform: rotate(45deg);
@@ -71,6 +71,7 @@ img {
 
 .vendedorestica {
   animation: esticaVendedor 0.4s ease;
+  transform-origin: bottom;
 }
 
 .vendedor {

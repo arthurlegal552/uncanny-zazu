@@ -79,6 +79,10 @@
     }, 400); // igual à duração da animação
                 
             localStorage.setItem("valor", valor);
+                const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+               inventario.push("Debbie");
+               localStorage.setItem("inventario", JSON.stringify(inventario));
+               atualizarInventario();
             document.getElementById("outraTelaContador").textContent = valor;
         }
     </script>

@@ -61,9 +61,13 @@
             const dialogo = document.querySelector(".texthat h1");
             const img = document.querySelector(".vendedor img");
             if (valor < 10) {
+                if (localStorage.getItem("debbieComprado") === "true") {
+                alert("Você já comprou este item!");
+                return;
                 dialogo.textContent = "you dont have enough zazas"
                 valor +=0;
                 return;
+                  }
             }
                 valor -=10;
                 dialogo.textContent = "thank you"

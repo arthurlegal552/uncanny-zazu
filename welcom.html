@@ -23,9 +23,6 @@
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
     <div class="texthat"><h1>What do you want, sir?</h1></div>
-    <div class="gif" id="monys">
-        <img src="images/jackpot.gif" alt="money wow">
-    </div>
 
     <nav>
         <ul>
@@ -50,7 +47,6 @@
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             const dialogo = document.querySelector(".texthat h1");
             const img = document.querySelector(".vendedor img");
-            const gif = document.querySelector("monys");
             if (valor < 10) {
                 dialogo.textContent = "you dont have enough zazas"
                 valor +=0;
@@ -60,8 +56,6 @@
                 dialogo.textContent = "thank you"
 
                 img.classList.add("vendedorestica");
-
-                gif.style.display = "block";
 
                 // Remove a classe após a animação para permitir reuso
                 setTimeout(() => {

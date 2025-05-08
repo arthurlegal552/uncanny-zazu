@@ -1,2 +1,27 @@
-:(
-<title>why???</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventário</title>
+</head>
+<body>
+    <h1>Seu Inventário</h1>
+    <p id="inventario">Carregando...</p>
+    <a href="index.html">Voltar</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            const inventarioEl = document.getElementById("inventario");
+
+            if (inventario.length > 0) {
+                inventarioEl.textContent = inventario.join(", ");
+            } else {
+                inventarioEl.textContent = "Seu inventário está vazio!";
+            }
+        });
+    </script>
+</body>
+</html>
+
+<title>inventory</title>

@@ -22,7 +22,7 @@
     <div class="vendedor">
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
-    <div class="texthat"><h1>What do you want, sir?</h1></div>
+    <div class="texthat"><h1><p id="fala"></p></h1></div>
 
     <nav>
         <ul>
@@ -35,6 +35,7 @@
         <!-- Agora a imagem de Debbie tem um evento de clique -->
         <img src="images/debbie.png" alt="scarys" onclick="buyDebbie()">
     </div>
+    <p>Inventário: <span id="inventario"></span></p>
     <div class="debbie">debbie: 10 zazas</div>
 
     <script>
@@ -59,7 +60,6 @@
 
                 // Remove a classe após a animação para permitir reuso
                 setTimeout(() => {
-                    gif.style.display = "none";
                 vendedorImg.classList.remove("vendedorestica");
     }, 400); // igual à duração da animação
                 

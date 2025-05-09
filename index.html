@@ -32,7 +32,13 @@
             document.getElementById("contadas").textContent = valor;
         
             function aumentarValor() {
-                valor += 1;
+                const possuiDebbie = localStorage.getItem("debbie") !== null;
+        
+                // Define o valor do incremento
+                const incremento = possuiDebbie ? 5 : 1;
+
+                // Atualiza o valor
+                valor += incremento;
                 document.getElementById("contadas").textContent = valor;
                 localStorage.setItem("valor", valor); // Salva o novo valor
             }

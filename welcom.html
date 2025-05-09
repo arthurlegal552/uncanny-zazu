@@ -43,6 +43,16 @@
             document.getElementById("outraTelaContador").textContent = valorSalvo;
         });
 
+        const fala = document.getElementById("fala");
+        const frases = ["yo", "are you still up?", "how about get more zazas?", "whatever"];
+        let index = 0;
+
+        setInterval(() => {
+    fala.textContent = frases[index];  // Atualiza a fala
+    index = (index + 1) % frases.length;  // Muda para a próxima frase
+}, 10000);  // 20 segundos
+
+
         function verificarCompra() {
     if (localStorage.getItem("debbieComprado") === "true") {
         document.getElementById("status").textContent = "you already have that";

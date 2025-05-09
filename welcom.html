@@ -96,7 +96,7 @@
             localStorage.setItem("valor", valor);
                 const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
                inventario.push("Debbie");
-               localStorage.setItem("inventario", JSON.stringify(inventario));
+               localStorage.setItem("debbie", JSON.stringify(item));
                atualizarInventario();
             document.getElementById("outraTelaContador").textContent = valor;
         }

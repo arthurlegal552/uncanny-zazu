@@ -32,17 +32,22 @@
             document.getElementById("contadas").textContent = valor;
         
             function aumentarValor() {
-                const possuiDebbie = localStorage.getItem("Debbie") !== null;
-        
-                // Define o valor do incremento
-                const incremento = possuiDebbie ? 5 : 1;
+                let valor = parseInt(localStorage.getItem("valor")) || 0;
+    document.getElementById("contadas").textContent = valor;
 
-                // Atualiza o valor
-                valor += incremento;
-                document.getElementById("contadas").textContent = valor;
+    function aumentarValor() {
+        // Verifica se o jogador possui o Debbie
+        const possuiDebbie = localStorage.getItem("debbie") === "true";
         
-                // Salva no localStorage
-                localStorage.setItem("valor", valor);
+        // Define o valor do incremento
+        const incremento = possuiDebbie ? 5 : 1;
+
+        // Atualiza o valor
+        valor += incremento;
+        document.getElementById("contadas").textContent = valor;
+        
+        // Salva no localStorage
+        localStorage.setItem("valor", valor);
             }
         </script>
         

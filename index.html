@@ -40,7 +40,9 @@
                 // Atualiza o valor
                 valor += incremento;
                 document.getElementById("contadas").textContent = valor;
-                localStorage.setItem("valor", valor); // Salva o novo valor
+        
+                // Salva no localStorage
+                localStorage.setItem("valor", valor);
             }
         </script>
         

@@ -12,9 +12,18 @@
     <script>
         // Ao carregar a página, recupera o valor salvo no localStorage
         document.addEventListener("DOMContentLoaded", () => {
-            const valorSalvo = parseInt(localStorage.getItem("valor")) || 0; // Certifica-se que é um número
-            // Exibe o valor na página
-            document.getElementById("outraTelaContador").textContent = valorSalvo;
+    const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
+    document.getElementById("outraTelaContador").textContent = valorSalvo;
+
+    // Verifica se Debbie já foi comprada
+    if (localStorage.getItem("debbieComprado") === "true") {
+        const dialogo = document.querySelector(".texthat h1");
+        dialogo.textContent = "Já comprado!";
+        document.querySelector(".debbieimg img").style.pointerEvents = "none"; // Desativa clique
+    }
+
+    // Atualiza o inventário na tela
+    atualizarInventario();
         });
     </script>
 

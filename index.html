@@ -36,14 +36,9 @@
     document.getElementById("contadas").textContent = valor;
 
     function aumentarValor() {
-        // Verifica se o jogador possui o Debbie
-        const possuiDebbie = localStorage.getItem("debbie") === "true";
-        
-        // Define o valor do incremento
-        const incremento = possuiDebbie ? 5 : 1;
 
         // Atualiza o valor
-        valor += incremento;
+        valor +=1
         document.getElementById("contadas").textContent = valor;
         
         // Salva no localStorage

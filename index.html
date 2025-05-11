@@ -35,10 +35,7 @@
                 let valor = parseInt(localStorage.getItem("valor")) || 0;
     document.getElementById("contadas").textContent = valor;
 
-    function aumentarValor() {
-
-        // Atualiza o valor
-        valor +=1
+    valor +=1
         document.getElementById("contadas").textContent = valor;
         
         // Salva no localStorage

@@ -9,29 +9,13 @@
     <!-- Exibe o valor de zazas -->
     <p>Seus zazas: <span id="outraTelaContador">0</span></p>
 
-    <script>
-        // Ao carregar a página, recupera o valor salvo no localStorage
-        document.addEventListener("DOMContentLoaded", () => {
-    const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
-    document.getElementById("outraTelaContador").textContent = valorSalvo;
-
-    // Verifica se Debbie já foi comprada
-    if (localStorage.getItem("debbieComprado") === "true") {
-        const dialogo = document.querySelector(".texthat h1");
-        dialogo.textContent = "Já comprado!";
-        document.querySelector(".debbieimg img").style.pointerEvents = "none"; // Desativa clique
-    }
-
-    // Atualiza o inventário na tela
-    atualizarInventario();
-        });
-    </script>
-
     <!-- Imagem do vendedor com a função de compra -->
     <div class="vendedor">
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
-    <div class="texthat"><h1><p id="fala"></p></h1></div>
+
+    <!-- Texto falado -->
+    <div class="texthat"><h1 id="fala"></h1></div>
 
     <nav>
         <ul>
@@ -41,15 +25,27 @@
 
     <!-- Produto a ser comprado -->
     <div class="debbieimg">
-        <!-- Agora a imagem de Debbie tem um evento de clique -->
         <img src="images/debbie.png" alt="scarys" onclick="buyDebbie()">
     </div>
     <div class="debbie">debbie: 10 zazas</div>
 
+    <!-- Inventário visível -->
+    <div><strong>Inventário:</strong> <span id="inventario"></span></div>
+
     <script>
+        // Quando a página carregar
         document.addEventListener("DOMContentLoaded", () => {
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
+
+            // Verifica se já comprou Debbie
+            if (localStorage.getItem("debbieComprado") === "true") {
+                const dialogo = document.getElementById("fala");
+                dialogo.textContent = "Já comprado!";
+                document.querySelector(".debbieimg img").style.pointerEvents = "none";
+            }
+
+            atualizarInventario();
         });
 
         const fala = document.getElementById("fala");
@@ -57,59 +53,59 @@
         let index = 0;
 
         setInterval(() => {
-    fala.textContent = frases[index];  // Atualiza a fala
-    index = (index + 1) % frases.length;  // Muda para a próxima frase
-}, 10000);  // 20 segundos
-
-
-        function verificarCompra() {
-    if (localStorage.getItem("debbieComprado") === "true") {
-        document.getElementById("status").textContent = "you already have that";
-        document.getElementById("itemImg").style.pointerEvents = "none"; // Desativa clique
-    }
-}
+            fala.textContent = frases[index];
+            index = (index + 1) % frases.length;
+        }, 10000);
 
         function atualizarInventario() {
-        const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-        document.getElementById("inventario").textContent = inventario.join(", ");
-       }
-    
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            document.getElementById("inventario").textContent = inventario.join(", ");
+        }
+
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
-            const dialogo = document.querySelector(".texthat h1");
+            const dialogo = document.getElementById("fala");
             const img = document.querySelector(".vendedor img");
             const itemimg = document.querySelector(".debbieimg img");
+
             if (valor < 10) {
-                dialogo.textContent = "you dont have enough zazas"
-                valor +=0;
+                dialogo.textContent = "you don't have enough zazas";
                 return;
-                  }
+            }
 
-                if (localStorage.getItem("debbieComprado") === "true") {
-                dialogo.textContent = "you aready bought that";
-                 return;
-                 }
+            if (localStorage.getItem("debbieComprado") === "true") {
+                dialogo.textContent = "you already bought that";
+                return;
+            }
 
-                valor -=10;
-                dialogo.textContent = "thank you"
+            valor -= 10;
+            dialogo.textContent = "thank you";
+            img.classList.add("vendedorestica");
 
-                img.classList.add("vendedorestica");
+            setTimeout(() => {
+                img.classList.remove("vendedorestica");
+                localStorage.setItem("debbieComprado", "true");
+                itemimg.style.pointerEvents = "none";
+                dialogo.textContent = "Já comprado!";
+            }, 400);
 
-                // Remove a classe após a animação para permitir reuso
-                setTimeout(() => {
-                vendedorImg.classList.remove("vendedorestica");
-                    localStorage.setItem("debbieComprado", "true");
-                    itemimg.style.pointerEvents = "none"; // Desativa clique
-    }, 400); // igual à duração da animação
-                
             localStorage.setItem("valor", valor);
-                const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-               inventario.push("Debbie");
-               localStorage.setItem("inventario", JSON.stringify(inventario));
-               atualizarInventario();
+
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            inventario.push("Debbie");
+            localStorage.setItem("inventario", JSON.stringify(inventario));
+            atualizarInventario();
+
+            document.getElementById("outraTelaContador").textContent = valor;
+        }
+
+        // Função dummy de exemplo para buy() se quiser usar depois
+        function buy() {
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            valor += 5;
+            localStorage.setItem("valor", valor);
             document.getElementById("outraTelaContador").textContent = valor;
         }
     </script>
-    
 </body>
 </html>

@@ -69,6 +69,7 @@
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             const dialogo = document.querySelector(".texthat h1");
             const img = document.querySelector(".vendedor img");
+            const itemimg = document.querySelector(".debbieimg img");
             if (valor < 10) {
                 dialogo.textContent = "you dont have enough zazas"
                 valor +=0;
@@ -89,8 +90,7 @@
                 setTimeout(() => {
                 vendedorImg.classList.remove("vendedorestica");
                     localStorage.setItem("debbieComprado", "true");
-                    document.getElementById("status").textContent = "Já comprado!";
-                    document.getElementById("itemImg").style.pointerEvents = "none"; // Desativa clique
+                    itemimg.style.pointerEvents = "none"; // Desativa clique
     }, 400); // igual à duração da animação
                 
             localStorage.setItem("valor", valor);

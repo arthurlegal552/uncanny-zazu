@@ -14,6 +14,8 @@
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
 
+    <button onclick="resetarInventario()">Resetar Inventário</button>
+
     <!-- Texto falado -->
     <div class="texthat"><h1 id="fala"></h1></div>
 
@@ -99,13 +101,23 @@
             document.getElementById("outraTelaContador").textContent = valor;
         }
 
-        // Função dummy de exemplo para buy() se quiser usar depois
-        function buy() {
-            let valor = parseInt(localStorage.getItem("valor")) || 0;
-            valor += 5;
-            localStorage.setItem("valor", valor);
-            document.getElementById("outraTelaContador").textContent = valor;
-        }
+        function resetarInventario() {
+    if (confirm("Tem certeza que deseja resetar seu inventário e zazas?")) {
+        // Limpa os itens específicos
+        localStorage.removeItem("debbieComprado");
+        localStorage.removeItem("inventario");
+        localStorage.setItem("valor", "0");
+
+        // Atualiza visualmente a tela
+        document.getElementById("outraTelaContador").textContent = "0";
+        document.getElementById("inventario").textContent = "";
+        document.querySelector(".debbieimg img").style.pointerEvents = "auto";
+        document.getElementById("fala").textContent = "Reiniciado!";
+
+        alert("Inventário e zazas resetados!");
+    }
+}
+
     </script>
 </body>
 </html>

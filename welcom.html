@@ -85,10 +85,8 @@
             img.classList.add("vendedorestica");
 
             setTimeout(() => {
-                img.classList.remove("vendedorestica");
                 localStorage.setItem("debbieComprado", "true");
                 itemimg.style.pointerEvents = "none";
-                dialogo.textContent = "Já comprado!";
             }, 400);
 
             localStorage.setItem("valor", valor);

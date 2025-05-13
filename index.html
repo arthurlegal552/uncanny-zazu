@@ -32,14 +32,9 @@
             document.getElementById("contadas").textContent = valor;
         
             function aumentarValor() {
-                let valor = parseInt(localStorage.getItem("valor")) || 0;
-    document.getElementById("contadas").textContent = valor;
-
-    valor +=1
-        document.getElementById("contadas").textContent = valor;
-        
-        // Salva no localStorage
-        localStorage.setItem("valor", valor);
+                valor += 1;
+                document.getElementById("contadas").textContent = valor;
+                localStorage.setItem("valor", valor); // Salva o novo valor
             }
         </script>
         

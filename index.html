@@ -22,6 +22,9 @@
         <div class="center">
             <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica">
         </div>
+                <div class="dabby">
+            <img src="images/debbie.png" alt="Clique aqui" width="200" class="estica">
+        </div>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
@@ -30,6 +33,16 @@
             // Sempre que a página carregar, pega o valor do localStorage
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
+
+                        function atualizarDebbie() {
+                const debbie = localStorage.getItem("debbieComprado");
+                const dabby = document.getElementById("dabby")
+                if (debbie) {
+                    dabby.style.display = "block";
+                } else {
+                    dabby.style.display = "none";
+                }
+            }
         
             function aumentarValor() {
                 valor += 1;

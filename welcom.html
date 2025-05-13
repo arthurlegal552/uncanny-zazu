@@ -98,7 +98,7 @@
         }
 
         function resetarInventario() {
-    if (confirm("Tem certeza que deseja resetar seu inventário e zazas?")) {
+    if (confirm("do you wanna do that fr?")) {
         // Limpa os itens específicos
         localStorage.removeItem("debbieComprado");
         localStorage.removeItem("inventario");
@@ -108,9 +108,9 @@
         document.getElementById("outraTelaContador").textContent = "0";
         document.getElementById("inventario").textContent = "";
         document.querySelector(".debbieimg img").style.pointerEvents = "auto";
-        document.getElementById("fala").textContent = "Reiniciado!";
+        document.getElementById("fala").textContent = "restarted";
 
-        alert("Inventário e zazas resetados!");
+        alert("reseted");
     }
 }
 

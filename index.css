@@ -27,7 +27,7 @@ img:hover {
 }
 
 img:active {
-  transform: scale(1.02);
+  transform: scale(2.01);
 }
 
 .center {

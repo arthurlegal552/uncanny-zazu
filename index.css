@@ -22,6 +22,14 @@ img {
   height: 150px;
 }
 
+img:hover {
+  opacity: 0.9; 
+}
+
+img:active {
+  transform: scale(1.02);
+}
+
 .center {
   text-align: center;
 }

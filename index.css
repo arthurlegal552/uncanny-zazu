@@ -27,7 +27,7 @@ img {
 }
 
 .center:active {
-  transform: scale(2.01);
+  transform: scale(1.01) ease-in-out;
   animation: click 0.4s ease-in-out;
 }
 

@@ -36,11 +36,11 @@
 
                         function atualizarDebbie() {
                 const debbie = localStorage.getItem("debbieComprado");
-                const dabby = document.getElementById("debbie")
+                const dabby = document.querySelector(".debbie img")
                 if (debbie === true) {
-                    debbie.style.display = "block";
+                    dabby.style.display = "block";
                 } else {
-                    debbie.style.display = "none";
+                    dabby.style.display = "none";
                 }
             }
         

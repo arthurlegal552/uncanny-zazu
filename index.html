@@ -34,10 +34,9 @@
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
 
-                        function atualizarDebbie() {
-                const debbie = localStorage.getItem("debbieComprado");
+                 function atualizarDebbie() {
                 const dabby = document.querySelector(".debbie img")
-                if (debbie === true) {
+                if (localStorage.getItem("debbieComprado") === "true") {
                     dabby.style.display = "block";
                 } else {
                     dabby.style.display = "none";

@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <p>zaza: <span id="contadas">0</span></p>
 
-    <audio id="musicaFundo" autoplay loop>
-    <source src="sounds/hotel.mp3" type="mp3">
+    <audio id="musicaFundo" loop>
+    <source src="sounds/hotel.mp3" type="sounds/mpeg">
 </audio>
+
+    <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
             <li>
@@ -32,6 +33,7 @@
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
+            <h3>click any button to start</h3>
         </div>
         <script>
             // Sempre que a página carregar, pega o valor do localStorage
@@ -46,6 +48,22 @@
                     dabby.style.display = "none";
                 }
             }
+
+             function tocarMusica() {
+        const musica = document.getElementById("musicaFundo");
+        if (musica.paused) {
+            musica.volume = 0.3; // Volume opcional
+            musica.play().catch((e) => {
+                console.warn("Autoplay bloqueado:", e);
+            });
+        }
+    }
+
+        document.addEventListener("keydown", function tocarAoTeclar() {
+        tocarMusica();
+        // Remove o listener depois da primeira vez
+        document.removeEventListener("keydown", tocarAoTeclar);
+    });
         
             function aumentarValor() {
                 valor += 1;

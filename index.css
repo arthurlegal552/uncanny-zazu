@@ -39,6 +39,11 @@ img {
   text-align: center;
 }
 
+.debbiemons {
+  text-align: center;
+  justify-content: space-between;
+}
+
 .estica {
   width: 200px; /* ou o tamanho que quiser */
   animation: esticarImagem 1s infinite alternate;

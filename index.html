@@ -48,22 +48,6 @@
                     dabby.style.display = "none";
                 }
             }
-
-             function tocarMusica() {
-        const musica = document.getElementById("musicaFundo");
-        if (musica.paused) {
-            musica.volume = 0.3; // Volume opcional
-            musica.play().catch((e) => {
-                console.warn("Autoplay bloqueado:", e);
-            });
-        }
-    }
-
-        document.addEventListener("keydown", function tocarAoTeclar() {
-        tocarMusica();
-        // Remove o listener depois da primeira vez
-        document.removeEventListener("keydown", tocarAoTeclar);
-    });
         
             function aumentarValor() {
                 valor += 1;

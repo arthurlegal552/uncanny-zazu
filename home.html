@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zazu clicker</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <p>zaza: <span id="contadas">0</span></p>
+    <nav>
+        <ul>
+            <li>
+                <a href="welcom.html">store</a>
+            </li>
+            <li>
+                <a href="noo.html">actually dont click</a>
+            </li>
+        </ul>
+    </nav>
+    <header>
+        <div class="center">
+            <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica">
+        </div>
+                <div class="debbiemons">
+            <img src="images/debbie.png" alt="Clique aqui" width="200" class="estica">
+        </div>
+        <div class="text">
+            <h1>this is zazu</h1>
+            <h2>you can click him for points</h2>
+            <h3>click any button to start</h3>
+        </div>
+        <script>
+            // Sempre que a página carregar, pega o valor do localStorage
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            document.getElementById("contadas").textContent = valor;
+
+                 function atualizarDebbie() {
+                const dabby = document.querySelector(".debbiemons img")
+                if (localStorage.getItem("debbieComprado") === "true") {
+                    dabby.style.display = "block";
+                } else {
+                    dabby.style.display = "none";
+                }
+            }
+        
+            function aumentarValor() {
+                valor += 1;
+                document.getElementById("contadas").textContent = valor;
+                localStorage.setItem("valor", valor); // Salva o novo valor
+            }
+            atualizarDebbie()
+        </script>
+        
+    </header>
+</body>
+</html>

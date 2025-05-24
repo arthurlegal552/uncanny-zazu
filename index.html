@@ -8,10 +8,6 @@
 </head>
 <body>
 
-    <audio id="musicaFundo" loop>
-    <source src="sounds/hotel.mp3" type="sounds/mpeg">
-</audio>
-
     <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
@@ -41,7 +37,7 @@
             document.getElementById("contadas").textContent = valor;
 
                  function atualizarDebbie() {
-                const dabby = document.querySelector(".debbie img")
+                const dabby = document.querySelector(".debbiemons img")
                 if (localStorage.getItem("debbieComprado") === "true") {
                     dabby.style.display = "block";
                 } else {

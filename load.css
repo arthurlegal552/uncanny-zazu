@@ -21,6 +21,7 @@
   overflow: hidden;
   width: 250px;
   height: 40px;
+  text-decoration: none;
 }
 
 .btn-border:hover {

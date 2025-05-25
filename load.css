@@ -32,14 +32,12 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  position: relative;
+  position: absolute;
   transition: all 0.3s;
   overflow: hidden;
   width: 250px;
   height: 40px;
   text-decoration: none;
-  justify-content: center;
-  align-items: center;
 }
 
 .btn-border:hover {

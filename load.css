@@ -8,6 +8,39 @@
     text-align: center;
 }
 
+.btn-border {
+  padding: 12px 24px;
+  background: transparent;
+  color: #ff5722;
+  border: 2px solid #ff5722;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.btn-border:hover {
+  color: white;
+}
+
+.btn-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #ff5722;
+  z-index: -1;
+  transition: all 0.3s;
+}
+
+.btn-border:hover::before {
+  left: 0;
+}
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }

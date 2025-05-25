@@ -17,6 +17,11 @@
   height: auto;
 }
 
+.demo-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
 .btn-border {
   padding: 12px 24px;
   background: transparent;

@@ -32,7 +32,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  position: absolute;
+  position: relative;
   transition: all 0.3s;
   overflow: hidden;
   width: 250px;

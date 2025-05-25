@@ -17,8 +17,37 @@
         <h1>hii the game is loading</h1>
         <h2>click anything to enable sound and go to the menu!</h2>
     </div>
+        <audio id="bgMusic" loop>
+        <source src="your-music-file.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
         <a href="home.html">
-            <button class="btn-border">go to the game</button>
+            <button class="btn-border" onclick="playMusicAndRedirect()">go to the game</button>
         </a>
+        <script>
+        function playMusicAndRedirect() {
+            // Get the audio element
+            const bgMusic = document.getElementById('bgMusic');
+            
+            // Play the music
+            bgMusic.play()
+                .then(() => {
+                    // Music started playing, now redirect
+                    window.location.href = "home.html";
+                })
+                .catch(error => {
+                    // If audio playback fails (due to browser restrictions)
+                    console.log("Audio playback failed:", error);
+                    // Still redirect to the game
+                    window.location.href = "home.html";
+                });
+        }
+        
+        // Alternative: Enable audio on any click (as your message suggests)
+        document.body.addEventListener('click', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.play().catch(e => console.log("Audio play failed:", e));
+        }, { once: true }); // Only runs once
+    </script>
 </body>
 </html>

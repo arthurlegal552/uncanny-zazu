@@ -1,7 +1,12 @@
  .build {
             animation: spin 2s linear infinite;
             transform-origin: top left;
+            text-align: center;
         }
+
+.load {
+    text-align: center;
+}
 
         @keyframes spin {
             0% { transform: rotate(0deg); }

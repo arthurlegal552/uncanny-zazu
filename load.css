@@ -19,8 +19,8 @@
   position: relative;
   transition: all 0.3s;
   overflow: hidden;
-  width: 150px;
-  height: 30px;
+  width: 250px;
+  height: 40px;
 }
 
 .btn-border:hover {

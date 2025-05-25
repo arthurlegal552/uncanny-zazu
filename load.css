@@ -38,7 +38,8 @@
   width: 250px;
   height: 40px;
   text-decoration: none;
-  text-align: center;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
 }
 
 .btn-border:hover {

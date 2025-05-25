@@ -10,6 +10,7 @@
 
 body {
   background-image: url(https://uncanny-zazu.vercel.app/images/back.png);
+  opacity: 0.3;
 }
 
 .btn-border {

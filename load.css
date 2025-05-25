@@ -1,5 +1,6 @@
  .build {
             animation: spin 2s linear infinite;
+            transform-origin: top left;
         }
 
         @keyframes spin {

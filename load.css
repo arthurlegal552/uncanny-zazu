@@ -1,6 +1,6 @@
  .build {
             animation: spin 2s linear infinite;
-            transform-origin: top left;
+            transform-origin: center;
             text-align: center;
         }
 

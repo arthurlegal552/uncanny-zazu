@@ -26,6 +26,7 @@
                 <div class="debbiemons">
             <img src="images/debbie.png" alt="Clique aqui" width="200" class="estica">
         </div>
+        <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/blob/main/sounds/hotel.mp3" preload="auto"></audio>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
@@ -44,13 +45,22 @@
                     dabby.style.display = "none";
                 }
             }
-        
+
+            function playDalgona() {
+            const dalgona = document.getElementById("dalgona");
+            dalgona.pause();
+            dalgona.currentTime = 0;
+            dalgona.loop = true;
+            dalgona.play();
+        }
+
             function aumentarValor() {
                 valor += 1;
                 document.getElementById("contadas").textContent = valor;
                 localStorage.setItem("valor", valor); // Salva o novo valor
             }
             atualizarDebbie()
+            playDalgona()
         </script>
         
     </header>

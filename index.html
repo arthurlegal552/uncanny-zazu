@@ -24,45 +24,52 @@
         <a href="home.html">
             <button class="btn-border">go to the game</button>
         </a>
-        <script>
-        // First check if audio path is correct
-        function checkAudio() {
-            const audio = new Audio('sounds/hotel.mp3');
+        <!-- Audio element with corrected path options -->
+    <audio id="bgMusic" loop>
+        <!-- Try these paths in order - browser will use the first one that works -->
+        <source src="./sounds/hotel.mp3" type="audio/mpeg">
+        <source src="sounds/hotel.mp3" type="audio/mpeg">
+        <source src="/sounds/hotel.mp3" type="audio/mpeg">
+        <source src="hotel.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Verify audio file exists
+        function verifyAudio() {
+            const audio = document.getElementById('bgMusic');
             audio.addEventListener('error', function() {
-                console.error("Audio file not found at: sounds/hotel.mp3");
-                alert("Error: Music file not found at sounds/hotel.mp3");
+                console.error("Audio load error - checked these paths:");
+                console.log("1. ./sounds/hotel.mp3");
+                console.log("2. sounds/hotel.mp3");
+                console.log("3. /sounds/hotel.mp3");
+                console.log("4. hotel.mp3");
+                alert("Error: Could not load music file. Check console for details.");
             });
         }
-        checkAudio();
-        
-        function playMusicAndRedirect() {
+        verifyAudio();
+
+        // Play music and redirect
+        document.getElementById('gameButton').addEventListener('click', function() {
             const bgMusic = document.getElementById('bgMusic');
-            
-            // Modern browsers require promise handling
-            const playPromise = bgMusic.play();
-            
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
+            bgMusic.play()
+                .then(() => {
+                    setTimeout(() => {
                         window.location.href = "home.html";
-                    })
-                    .catch(error => {
-                        console.error("Playback failed:", error);
-                        window.location.href = "home.html";
-                    });
-            } else {
-                window.location.href = "home.html";
-            }
-        }
-        
+                    }, 500); // Small delay to ensure audio starts
+                })
+                .catch(error => {
+                    console.error("Playback failed:", error);
+                    window.location.href = "home.html";
+                });
+        });
+
         // Enable audio on any click
         document.addEventListener('click', function firstClick() {
             const bgMusic = document.getElementById('bgMusic');
-            bgMusic.play().catch(e => {
-                console.log("Audio play failed:", e);
-            });
+            bgMusic.play().catch(e => console.log("Audio play attempt:", e));
             document.removeEventListener('click', firstClick);
-        });
+        }, { once: true });
     </script>
 </body>
 </html>

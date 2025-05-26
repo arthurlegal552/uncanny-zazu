@@ -25,7 +25,14 @@ img {
 .sofa {
   width: 350px;
   height: 150px;
-  text-align: center;
+  position: fixed;
+  /* Center the sofa container */
+  left: 50%;
+  transform: translateX(-50%);
+  /* Add these to properly contain the centered content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .center:hover {
@@ -35,6 +42,7 @@ img {
 .center:active {
   transform: scale(1.01);
   animation: click 0.4s ease-in-out;
+  position: relative;
 }
 
 .center {

@@ -25,29 +25,44 @@
             <button class="btn-border">go to the game</button>
         </a>
         <script>
+        // First check if audio path is correct
+        function checkAudio() {
+            const audio = new Audio('sounds/hotel.mp3');
+            audio.addEventListener('error', function() {
+                console.error("Audio file not found at: sounds/hotel.mp3");
+                alert("Error: Music file not found at sounds/hotel.mp3");
+            });
+        }
+        checkAudio();
+        
         function playMusicAndRedirect() {
-            // Get the audio element
             const bgMusic = document.getElementById('bgMusic');
             
-            // Play the music
-            bgMusic.play()
-                .then(() => {
-                    // Music started playing, now redirect
-                    window.location.href = "home.html";
-                })
-                .catch(error => {
-                    // If audio playback fails (due to browser restrictions)
-                    console.log("Audio playback failed:", error);
-                    // Still redirect to the game
-                    window.location.href = "home.html";
-                });
+            // Modern browsers require promise handling
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        window.location.href = "home.html";
+                    })
+                    .catch(error => {
+                        console.error("Playback failed:", error);
+                        window.location.href = "home.html";
+                    });
+            } else {
+                window.location.href = "home.html";
+            }
         }
         
-        // Alternative: Enable audio on any click (as your message suggests)
-        document.body.addEventListener('click', function() {
+        // Enable audio on any click
+        document.addEventListener('click', function firstClick() {
             const bgMusic = document.getElementById('bgMusic');
-            bgMusic.play().catch(e => console.log("Audio play failed:", e));
-        }, { once: true }); // Only runs once
+            bgMusic.play().catch(e => {
+                console.log("Audio play failed:", e);
+            });
+            document.removeEventListener('click', firstClick);
+        });
     </script>
 </body>
 </html>

@@ -22,20 +22,6 @@ img {
   height: 150px;
 }
 
-.sofa {
-  width: 600px; /* Increased from 350px */
-  height: 300px; /* Increased from 150px */
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.3); /* Temporary to visualize the area */
-  border: 1px dashed #ccc; /* Temporary to visualize the area */
-}
-
 .center:hover {
   opacity: 0.9; 
 }
@@ -43,7 +29,6 @@ img {
 .center:active {
   transform: scale(1.01);
   animation: click 0.4s ease-in-out;
-  position: relative;
 }
 
 .center {

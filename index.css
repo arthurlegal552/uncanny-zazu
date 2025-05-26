@@ -23,16 +23,17 @@ img {
 }
 
 .sofa {
-  width: 450px;
-  height: 450px;
+  width: 600px; /* Increased from 350px */
+  height: 300px; /* Increased from 150px */
   position: fixed;
-  /* Center the sofa container */
   left: 50%;
-  transform: translateX(-30%);
-  /* Add these to properly contain the centered content */
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.3); /* Temporary to visualize the area */
+  border: 1px dashed #ccc; /* Temporary to visualize the area */
 }
 
 .center:hover {

@@ -22,6 +22,12 @@ img {
   height: 150px;
 }
 
+.sofa {
+  width: 350px;
+  height: 150px;
+  text-align: center;
+}
+
 .center:hover {
   opacity: 0.9; 
 }

@@ -17,59 +17,19 @@
         <h1>hii the game is loading</h1>
         <h2>click anything to enable sound and go to the menu!</h2>
     </div>
-        <audio id="bgMusic" loop>
-        <source src="sounds/hotel.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/blob/main/sounds/hotel.mp3" preload="auto"></audio>
         <a href="home.html">
-            <button class="btn-border">go to the game</button>
+            <button class="btn-border" onclick="playDalgona()">go to the game</button>
         </a>
-        <!-- Audio element with corrected path options -->
-    <audio id="bgMusic" loop>
-        <!-- Try these paths in order - browser will use the first one that works -->
-        <source src="./sounds/hotel.mp3" type="audio/mpeg">
-        <source src="sounds/hotel.mp3" type="audio/mpeg">
-        <source src="/sounds/hotel.mp3" type="audio/mpeg">
-        <source src="hotel.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <script>
-        // Verify audio file exists
-        function verifyAudio() {
-            const audio = document.getElementById('bgMusic');
-            audio.addEventListener('error', function() {
-                console.error("Audio load error - checked these paths:");
-                console.log("1. ./sounds/hotel.mp3");
-                console.log("2. sounds/hotel.mp3");
-                console.log("3. /sounds/hotel.mp3");
-                console.log("4. hotel.mp3");
-                alert("Error: Could not load music file. Check console for details.");
-            });
+        <script>
+            
+        function playDalgona() {
+            const dalgona = document.getElementById("dalgona");
+            dalgona.pause();
+            dalgona.currentTime = 0;
+            dalgona.loop = true;
+            dalgona.play();
         }
-        verifyAudio();
-
-        // Play music and redirect
-        document.getElementById('gameButton').addEventListener('click', function() {
-            const bgMusic = document.getElementById('bgMusic');
-            bgMusic.play()
-                .then(() => {
-                    setTimeout(() => {
-                        window.location.href = "home.html";
-                    }, 500); // Small delay to ensure audio starts
-                })
-                .catch(error => {
-                    console.error("Playback failed:", error);
-                    window.location.href = "home.html";
-                });
-        });
-
-        // Enable audio on any click
-        document.addEventListener('click', function firstClick() {
-            const bgMusic = document.getElementById('bgMusic');
-            bgMusic.play().catch(e => console.log("Audio play attempt:", e));
-            document.removeEventListener('click', firstClick);
-        }, { once: true });
-    </script>
+        </script>
 </body>
 </html>

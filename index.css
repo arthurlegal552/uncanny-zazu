@@ -23,12 +23,12 @@ img {
 }
 
 .sofa {
-  width: 350px;
-  height: 150px;
+  width: 450px;
+  height: 450px;
   position: fixed;
   /* Center the sofa container */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-30%);
   /* Add these to properly contain the centered content */
   display: flex;
   justify-content: center;

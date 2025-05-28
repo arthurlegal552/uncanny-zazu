@@ -71,6 +71,8 @@ img {
 .debbieimg {
   text-align: right;
   transform-origin: bottom;
+    width: 150px;
+  height: 150px;
 }
 
 .debbieimg:hover {

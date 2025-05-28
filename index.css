@@ -88,6 +88,10 @@ img {
   text-align: center;
 }
 
+.items.container-fluid{position:relative;}
+.items.container-fluid .fundo{position:absolute;top:0;left:0;z-index:1}
+.items.container-fluid div.debbieimg{position:relative;z-index:5;color:white;}
+
 .vendedorestica {
 animation: shake  0.4s infinite ease-in-out;
 transform-origin: bottom;

@@ -88,24 +88,6 @@ img {
   text-align: center;
 }
 
-.items.container-fluid {
-  position: relative;
-}
-
-.items.container-fluid .fundo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 600;
-  height: 900;
-  z-index: 1;
-}
-
-.items.container-fluid .content {
-  position: relative;
-  z-index: 2;
-}
-
 .vendedorestica {
 animation: shake  0.4s infinite ease-in-out;
 transform-origin: bottom;

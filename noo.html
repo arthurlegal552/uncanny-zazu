@@ -102,14 +102,10 @@
                 image: "images/fish.jpg",
                 effect: "Restores 50% hunger",
                 enabled: function() {
-                    // Fish can always be used if you have it
-                    return true;
+                    const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+                    return inventory.includes("Fish");
                 },
                 action: function() {
-                    let currentHunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
-                    const newHunger = Math.min(100, currentHunger + 50);
-                    localStorage.setItem("zazuHunger", newHunger);
-                    
                     // Remove one fish from inventory
                     const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
                     const fishIndex = inventory.indexOf("Fish");
@@ -118,7 +114,12 @@
                         localStorage.setItem("inventario", JSON.stringify(inventory));
                     }
                     
-                    alert(`Zazu ate the fish! Hunger: ${newHunger}%`);
+                    // Update hunger
+                    let currentHunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+                    currentHunger = Math.min(100, currentHunger + 50);
+                    localStorage.setItem("zazuHunger", currentHunger);
+                    
+                    alert(`Zazu ate the fish! Hunger: ${currentHunger}%`);
                     updateInventoryDisplay();
                     
                     // Update game page if open
@@ -142,29 +143,16 @@
                     alert(`Debbie ${!currentlyEquipped ? "equipped" : "unequipped"}!`);
                 }
             }
-            // Add more items as needed
         };
 
         // Initialize inventory
         document.addEventListener("DOMContentLoaded", () => {
-            // Make sure fish goes to inventory when bought
-            ensureFishInInventory();
             updateInventoryDisplay();
         });
-
-        function ensureFishInInventory() {
-            // Check if fish exists in inventory, if not add it
-            const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
-            if (!inventory.includes("Fish") && localStorage.getItem("hasBoughtFish") === "true") {
-                inventory.push("Fish");
-                localStorage.setItem("inventario", JSON.stringify(inventory));
-            }
-        }
 
         function updateInventoryDisplay() {
             const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
             const container = document.getElementById("inventory-container");
-            
             container.innerHTML = "";
 
             if (inventory.length === 0) {

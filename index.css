@@ -44,6 +44,62 @@ img {
   justify-content: space-between;
 }
 
+        /* Random Event Styles */
+        .random-event {
+            position: fixed;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            font-size: 24px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: eventFade 5s forwards;
+            top: 20%;
+        }
+
+        @keyframes eventFade {
+            0% { opacity: 0; transform: translateY(-50px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* Event-specific animations */
+        .rainbow-bg {
+            animation: rainbowBg 10s linear infinite;
+        }
+
+        @keyframes rainbowBg {
+            0% { background-color: #ff6b6b; }
+            14% { background-color: #ffb347; }
+            28% { background-color: #f9ff47; }
+            42% { background-color: #47ff5e; }
+            57% { background-color: #47d1ff; }
+            71% { background-color: #a347ff; }
+            85% { background-color: #ff47d1; }
+            100% { background-color: #ff6b6b; }
+        }
+
+        .shake-screen {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+
+        .float-up {
+            animation: floatUp 5s ease-in-out forwards;
+        }
+
+        @keyframes floatUp {
+            to { transform: translateY(-100vh); }
+        }
+
 .estica {
   width: 200px; /* ou o tamanho que quiser */
   animation: esticarImagem 1s infinite alternate;

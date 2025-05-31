@@ -69,7 +69,24 @@
 
         function atualizarInventario() {
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-            document.getElementById("inventario").textContent = inventario.join(", ");
+            
+            // Count fish properly
+            const fishCount = inventario.filter(item => item === "Fish").length;
+            
+            // Display inventory with counts
+            const inventoryDisplay = [];
+            const counts = {};
+            
+            inventario.forEach(item => {
+                counts[item] = (counts[item] || 0) + 1;
+            });
+            
+            for (const item in counts) {
+                inventoryDisplay.push(`${item} (×${counts[item]})`);
+            }
+            
+            document.getElementById("inventario").textContent = 
+                inventoryDisplay.length > 0 ? inventoryDisplay.join(", ") : "Empty";
         }
 
         let fishCount = parseInt(localStorage.getItem("fishCount")) || 0;
@@ -94,10 +111,15 @@
         document.getElementById("fish-count").textContent = fishCount;
 
         // Add to inventory
-        const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-        inventario.push("Fish");
-        localStorage.setItem("hasBoughtFish", "true");
-        localStorage.setItem("inventario", JSON.stringify(inventario));
+        // Add to inventory (corrected version)
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            inventario.push("Fish");
+            localStorage.setItem("inventario", JSON.stringify(inventario));
+            localStorage.setItem("hasBoughtFish", "true"); // Flag for inventory system
+
+            let fishCount = parseInt(localStorage.getItem("fishCount")) || 0;
+            fishCount++;
+            localStorage.setItem("fishCount", fishCount);
         atualizarInventario();
 
         // Visual feedback

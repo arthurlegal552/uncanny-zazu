@@ -6,17 +6,14 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- Exibe o valor de zazas -->
     <p>Seus zazas: <span id="outraTelaContador">0</span></p>
 
-    <!-- Imagem do vendedor com a função de compra -->
     <div class="vendedor">
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
     </div>
 
     <button onclick="resetarInventario()">Resetar Inventário</button>
 
-    <!-- Texto falado -->
     <div class="texthat"><h1 id="fala"></h1></div>
 
     <nav>
@@ -28,32 +25,28 @@
         <img src="images/debbie.png" alt="scarys" class="debbieimg" onclick="buyDebbie()">
         <div class="debbie">debbie:10 zazas</div>
     </div>
-    </div>
 
     <div class="food-item">
-    <img src="images/fish.jpg" alt="Fish" class="foodimg" onclick="buyFood()">
-    <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
-</div>
+        <img src="images/fish.jpg" alt="Fish" class="foodimg" onclick="buyFood()">
+        <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
+    </div>
 
-    <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto" preload="auto"></audio>
-    <audio id="buy" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/roblox-button-sfx.mp3" preload="auto" preload="auto"></audio>
+    <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto"></audio>
+    <audio id="buy" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/roblox-button-sfx.mp3" preload="auto"></audio>
 
-    <!-- Inventário visível -->
     <div><strong>Inventário:</strong> <span id="inventario"></span></div>
 
     <script>
-        // Quando a página carregar
         document.addEventListener("DOMContentLoaded", () => {
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
 
-            // Verifica se já comprou Debbie
             if (localStorage.getItem("debbieComprado") === "true") {
                 const dialogo = document.getElementById("fala");
                 dialogo.textContent = "Já comprado!";
-                document.querySelector(".debbieimg img").style.pointerEvents = "none";
+                document.querySelector(".debbieimg").style.pointerEvents = "none";
             }
-            playDalgona()
+            playDalgona();
             atualizarInventario();
         });
 
@@ -66,14 +59,8 @@
             index = (index + 1) % frases.length;
         }, 10000);
 
-
         function atualizarInventario() {
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-            
-            // Count fish properly
-            const fishCount = inventario.filter(item => item === "Fish").length;
-            
-            // Display inventory with counts
             const inventoryDisplay = [];
             const counts = {};
             
@@ -89,53 +76,33 @@
                 inventoryDisplay.length > 0 ? inventoryDisplay.join(", ") : "Empty";
         }
 
-        let fishCount = parseInt(localStorage.getItem("fishCount")) || 0;
-    document.getElementById("fish-count").textContent = fishCount;
+        function buyFood() {
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            
+            if (valor < 15) {
+                document.getElementById("fala").textContent = "Not enough zazas!";
+                return;
+            }
 
-    function buyFood() {
-        let valor = parseInt(localStorage.getItem("valor")) || 0;
-        
-        if (valor < 15) {
-            document.getElementById("fala").textContent = "Not enough zazas!";
-            return;
-        }
+            valor -= 15;
+            localStorage.setItem("valor", valor);
+            document.getElementById("outraTelaContador").textContent = valor;
 
-        // Deduct cost
-        valor -= 15;
-        localStorage.setItem("valor", valor);
-        document.getElementById("outraTelaContador").textContent = valor;
-
-        // Increase fish count
-        fishCount++;
-        localStorage.setItem("fishCount", fishCount);
-        document.getElementById("fish-count").textContent = fishCount;
-
-        // Add to inventory
-        // Add to inventory (corrected version)
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             inventario.push("Fish");
             localStorage.setItem("inventario", JSON.stringify(inventario));
-            localStorage.setItem("hasBoughtFish", "true"); // Flag for inventory system
+            localStorage.setItem("hasBoughtFish", "true");
 
-            let fishCount = parseInt(localStorage.getItem("fishCount")) || 0;
-            fishCount++;
-            localStorage.setItem("fishCount", fishCount);
-        atualizarInventario();
-
-        // Visual feedback
-        const fishImg = document.querySelector(".item-img");
-        fishImg.classList.add("purchase-animation");
-        setTimeout(() => fishImg.classList.remove("purchase-animation"), 400);
-
-        document.getElementById("fala").textContent = "Bought fish! (Total: " + fishCount + ")";
-        playbuy();
-    }
+            document.getElementById("fala").textContent = "Bought fish!";
+            playbuy();
+            atualizarInventario();
+        }
 
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             const dialogo = document.getElementById("fala");
             const img = document.querySelector(".vendedor img");
-            const itemimg = document.querySelector(".debbieimg img");
+            const itemimg = document.querySelector(".debbieimg");
 
             if (valor < 10) {
                 dialogo.textContent = "you don't have enough zazas";
@@ -149,7 +116,7 @@
 
             valor -= 10;
             dialogo.textContent = "thank you";
-            playbuy()
+            playbuy();
             img.classList.add("vendedorestica");
 
             setTimeout(() => {
@@ -158,34 +125,29 @@
             }, 400);
 
             localStorage.setItem("valor", valor);
-                const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-               inventario.push("Debbie");
-               localStorage.setItem("inventario", JSON.stringify(inventario));
-               atualizarInventario();
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            inventario.push("Debbie");
+            localStorage.setItem("inventario", JSON.stringify(inventario));
+            atualizarInventario();
             document.getElementById("outraTelaContador").textContent = valor;
         }
 
         function resetarInventario() {
-    if (confirm("do you wanna do that fr?")) {
-        // Limpa os itens específicos
-        localStorage.removeItem("debbieComprado");
-        localStorage.removeItem("inventario");
-        localStorage.setItem("valor", "0");
+            if (confirm("do you wanna do that fr?")) {
+                localStorage.removeItem("debbieComprado");
+                localStorage.removeItem("inventario");
+                localStorage.removeItem("hasBoughtFish");
+                localStorage.setItem("valor", "0");
 
-        // Atualiza visualmente a tela
-        document.getElementById("outraTelaContador").textContent = "0";
-        document.getElementById("inventario").textContent = "";
-        document.querySelector(".debbieimg img").style.pointerEvents = "auto";
-        document.getElementById("fala").textContent = "restarted";
-        localStorage.removeItem("fishCount");
-            fishCount = 0;
-            document.getElementById("fish-count").textContent = "0";
+                document.getElementById("outraTelaContador").textContent = "0";
+                document.getElementById("inventario").textContent = "Empty";
+                document.querySelector(".debbieimg").style.pointerEvents = "auto";
+                document.getElementById("fala").textContent = "restarted";
+                alert("reseted");
+            }
+        }
 
-        alert("reseted");
-    }
-}
-
-            function playDalgona() {
+        function playDalgona() {
             const dalgona = document.getElementById("shop");
             dalgona.pause();
             dalgona.currentTime = 0;
@@ -193,13 +155,12 @@
             dalgona.play();
         }
 
-            function playbuy() {
+        function playbuy() {
             const dalgona = document.getElementById("buy");
             dalgona.pause();
             dalgona.currentTime = 0;
             dalgona.play();
         }
-
     </script>
 </body>
 </html>

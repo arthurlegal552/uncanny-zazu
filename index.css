@@ -27,6 +27,41 @@ img {
   object-fit: contain;
 }
 
+.shop-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px;
+        margin: 10px 0;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+    .shop-item:hover {
+        transform: scale(1.02);
+        background: rgba(255,255,255,0.3);
+    }
+    .item-img {
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+    }
+    .item-info {
+        flex-grow: 1;
+    }
+    .item-quantity {
+        font-weight: bold;
+        font-size: 1.2em;
+        min-width: 30px;
+    }
+    .purchase-animation {
+        animation: bounce 0.4s;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
 /* Center Styles */
 .center {
   text-align: center;
@@ -149,41 +184,6 @@ img {
 .rainbow-bg {
   animation: rainbowBg 10s linear infinite;
 }
-
-.shop-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        transition: transform 0.2s;
-    }
-    .shop-item:hover {
-        transform: scale(1.02);
-        background: rgba(255,255,255,0.3);
-    }
-    .item-img {
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-    }
-    .item-info {
-        flex-grow: 1;
-    }
-    .item-quantity {
-        font-weight: bold;
-        font-size: 1.2em;
-        min-width: 30px;
-    }
-    .purchase-animation {
-        animation: bounce 0.4s;
-    }
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
 
 .click-frenzy {
   animation: frenzyGlow 0.3s infinite alternate;

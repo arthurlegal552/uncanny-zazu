@@ -28,6 +28,11 @@
     <div class="debbie">debbie: 10 zazas</div>
     </div>
 
+    <div class="food-item">
+    <img src="images/sofa.jpeg" alt="Fish" class="foodimg" onclick="buyFood()">
+    <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
+</div>
+
     <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto" preload="auto"></audio>
     <audio id="buy" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/roblox-button-sfx.mp3" preload="auto" preload="auto"></audio>
 
@@ -63,6 +68,42 @@
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             document.getElementById("inventario").textContent = inventario.join(", ");
         }
+
+        let fishCount = parseInt(localStorage.getItem("fishCount")) || 0;
+    document.getElementById("fish-count").textContent = fishCount;
+
+    function buyFood() {
+        let valor = parseInt(localStorage.getItem("valor")) || 0;
+        
+        if (valor < 15) {
+            document.getElementById("fala").textContent = "Not enough zazas!";
+            return;
+        }
+
+        // Deduct cost
+        valor -= 15;
+        localStorage.setItem("valor", valor);
+        document.getElementById("outraTelaContador").textContent = valor;
+
+        // Increase fish count
+        fishCount++;
+        localStorage.setItem("fishCount", fishCount);
+        document.getElementById("fish-count").textContent = fishCount;
+
+        // Add to inventory
+        const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+        inventario.push("Fish");
+        localStorage.setItem("inventario", JSON.stringify(inventario));
+        atualizarInventario();
+
+        // Visual feedback
+        const fishImg = document.querySelector(".item-img");
+        fishImg.classList.add("purchase-animation");
+        setTimeout(() => fishImg.classList.remove("purchase-animation"), 400);
+
+        document.getElementById("fala").textContent = "Bought fish! (Total: " + fishCount + ")";
+        playbuy();
+    }
 
         function buyDebbie() {
             let valor = parseInt(localStorage.getItem("valor")) || 0;
@@ -110,6 +151,9 @@
         document.getElementById("inventario").textContent = "";
         document.querySelector(".debbieimg img").style.pointerEvents = "auto";
         document.getElementById("fala").textContent = "restarted";
+        localStorage.removeItem("fishCount");
+            fishCount = 0;
+            document.getElementById("fish-count").textContent = "0";
 
         alert("reseted");
     }

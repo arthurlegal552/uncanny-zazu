@@ -64,6 +64,7 @@
             index = (index + 1) % frases.length;
         }, 10000);
 
+
         function atualizarInventario() {
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             document.getElementById("inventario").textContent = inventario.join(", ");

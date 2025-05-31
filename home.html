@@ -21,6 +21,19 @@
         <div class="debbiemons">
             <img src="images/debbie.png" alt="Debbie" width="200" class="estica" id="debbie">
         </div>
+
+        <div class="stats">
+        <h3>Zazu's Stats</h3>
+        <div>Hunger: <span id="hunger-value">100</span>%</div>
+        <div class="stat-bar">
+            <div id="hunger-fill" class="stat-fill"></div>
+        </div>
+        <div>Thirst: <span id="thirst-value">100</span>%</div>
+        <div class="stat-bar">
+            <div id="thirst-fill" class="stat-fill"></div>
+        </div>
+    </div>
+
         <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/hotel.mp3" preload="auto"></audio>
         <audio id="mew" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/m-e-o-w.mp3" preload="auto"></audio>
         <audio id="db" src="https://www.myinstants.com/instant/double-points-mp3-8965/embed/" preload="auto"></audio>
@@ -38,6 +51,30 @@
             // Game state
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
+
+            let hunger = 100;
+        let thirst = 100;
+        let isAlive = true;
+        const hungerDecay = 0.5; // Percentage points lost per second
+        const thirstDecay = 0.3; // Percentage points lost per second
+
+        // Add this function to update stats display
+        function updateStats() {
+            document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
+            document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
+            document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
+            document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
+            
+            // Check if Zazu is too hungry/thirsty
+            if ((hunger <= 0 || thirst <= 0) && isAlive) {
+                isAlive = false;
+                document.getElementById("zazu").classList.add("disabled");
+                alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
+            } else if (hunger > 0 && thirst > 0 && !isAlive) {
+                isAlive = true;
+                document.getElementById("zazu").classList.remove("disabled");
+            }
+        }
 
             // Audio functions
             function playDalgona() {
@@ -98,11 +135,50 @@
 
             // Game functions
             function aumentarValor() {
-                valor += 1;
-                meow();
-                document.getElementById("contadas").textContent = valor;
-                localStorage.setItem("valor", valor);
+            if (!isAlive) {
+                alert("Zazu needs food and water first!");
+                return;
             }
+            
+            valor += 1;
+            meow();
+            
+            // Small stat cost per click
+            hunger = Math.max(0, hunger - 1);
+            thirst = Math.max(0, thirst - 0.5);
+            
+            document.getElementById("contadas").textContent = valor;
+            localStorage.setItem("valor", valor);
+            updateStats();
+        }
+
+        // Add this game loop to decay stats over time
+        function gameLoop() {
+            hunger = Math.max(0, hunger - hungerDecay);
+            thirst = Math.max(0, thirst - thirstDecay);
+            updateStats();
+            setTimeout(gameLoop, 1000); // Run every second
+        }
+
+        // Add feeding functions (call these from your store)
+        function feedZazu(amount) {
+            hunger = Math.min(100, hunger + amount);
+            updateStats();
+        }
+
+        function waterZazu(amount) {
+            thirst = Math.min(100, thirst + amount);
+            updateStats();
+        }
+
+        // Initialize the game loop after DOM loads
+        window.onload = function() {
+            gameLoop();
+            // Your existing initialization code
+            atualizarDebbie();
+            playDalgona();
+            setTimeout(triggerRandomEvent, 60000);
+        };
 
             function atualizarDebbie() {
                 const dabby = document.querySelector(".debbiemons img");

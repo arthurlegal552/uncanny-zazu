@@ -200,3 +200,34 @@ img {
 @keyframes floatUp {
   to { transform: translateY(-100vh); }
 }
+
+.stats {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .stat-bar {
+            height: 20px;
+            margin: 5px 0;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        #hunger-fill {
+            background: #ff6b6b;
+            width: 100%;
+        }
+        #thirst-fill {
+            background: #47d1ff;
+            width: 100%;
+        }
+        .disabled {
+            filter: grayscale(70%);
+            opaci

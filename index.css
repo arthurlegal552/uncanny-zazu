@@ -26,14 +26,90 @@ img {
   opacity: 0.9; 
 }
 
-.center:active {
-  transform: scale(1.01);
-  animation: click 0.4s ease-in-out;
-}
-
 .center {
   text-align: center;
 }
+
+#center {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        #center:active {
+            transform: scale(0.8) rotate(10deg);
+        }
+        
+        .squish {
+            animation: squish 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes squish {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(0.8, 1.2) rotate(-5deg); }
+            50% { transform: scale(1.2, 0.8) rotate(5deg); }
+            75% { transform: scale(0.9, 1.1) rotate(-3deg); }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fly 1s ease-out forwards;
+            z-index: -1;
+        }
+        
+        @keyframes fly {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .eye {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            animation: blink 0.3s;
+            overflow: hidden;
+        }
+        
+        .eye::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+            animation: look 0.5s;
+        }
+        
+        @keyframes blink {
+            0%, 100% { height: 20px; top: 0; }
+            50% { height: 2px; top: 9px; }
+        }
+        
+        @keyframes look {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(5px, 0); }
+            50% { transform: translate(0, 5px); }
+            75% { transform: translate(-5px, 0); }
+            100% { transform: translate(0, 0); }
+        }
 
 .text {
   text-align: center;

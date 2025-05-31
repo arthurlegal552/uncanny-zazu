@@ -48,35 +48,56 @@
         </div>
 
         <script>
-            // Game state
+            // Game state - Load from localStorage or initialize
             let valor = parseInt(localStorage.getItem("valor")) || 0;
+            let hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+            let thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
+            let isAlive = true;
+            const hungerDecay = 0.5; // Percentage points lost per second
+            const thirstDecay = 0.3; // Percentage points lost per second
+            let isEventActive = false;
+            let eventTimeout = null;
+            let statInterval = null;
+
+            // Initialize UI
             document.getElementById("contadas").textContent = valor;
+            updateStats();
 
-            let hunger = 100;
-        let thirst = 100;
-        let isAlive = true;
-        const hungerDecay = 0.5; // Percentage points lost per second
-        const thirstDecay = 0.3; // Percentage points lost per second
-
-        // Add this function to update stats display
-        function updateStats() {
-            document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
-            document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
-            document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
-            document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
-            
-            // Check if Zazu is too hungry/thirsty
-            if ((hunger <= 0 || thirst <= 0) && isAlive) {
-                isAlive = false;
-                document.getElementById("zazu").classList.add("disabled");
-                alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
-            } else if (hunger > 0 && thirst > 0 && !isAlive) {
-                isAlive = true;
-                document.getElementById("zazu").classList.remove("disabled");
+            // Save stats to localStorage
+            function saveStats() {
+                localStorage.setItem("zazuHunger", hunger);
+                localStorage.setItem("zazuThirst", thirst);
+                localStorage.setItem("valor", valor);
             }
-        }
 
-            // Audio functions
+            // Update stats display
+            function updateStats() {
+                document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
+                document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
+                document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
+                document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
+                
+                // Check if Zazu is too hungry/thirsty
+                if ((hunger <= 0 || thirst <= 0) && isAlive) {
+                    isAlive = false;
+                    document.getElementById("zazu").classList.add("disabled");
+                    alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
+                } else if (hunger > 0 && thirst > 0 && !isAlive) {
+                    isAlive = true;
+                    document.getElementById("zazu").classList.remove("disabled");
+                }
+                
+                saveStats(); // Auto-save on update
+            }
+
+            // Game loop for stat decay
+            function gameLoop() {
+                hunger = Math.max(0, hunger - hungerDecay);
+                thirst = Math.max(0, thirst - thirstDecay);
+                updateStats();
+            }
+
+            // Audio functions (unchanged from your code)
             function playDalgona() {
                 const dalgona = document.getElementById("dalgona");
                 dalgona.pause();
@@ -93,14 +114,15 @@
                 mew.play();
             }
 
-                function db() {
+            function db() {
                 const db = document.getElementById("db");
                 db.pause();
                 db.currentTime = 0;
                 db.loop = false;
                 db.play();
             }
-                function nyan() {
+
+            function nyan() {
                 const nyan = document.getElementById("nyan");
                 nyan.pause();
                 nyan.currentTime = 0;
@@ -132,69 +154,30 @@
                 quake.play();
             }
 
-
-            // Game functions
+            // Modified click function
             function aumentarValor() {
-            if (!isAlive) {
-                alert("Zazu needs food and water first!");
-                return;
-            }
-            
-            valor += 1;
-            meow();
-            
-            // Small stat cost per click
-            hunger = Math.max(0, hunger - 1);
-            thirst = Math.max(0, thirst - 0.5);
-            
-            document.getElementById("contadas").textContent = valor;
-            localStorage.setItem("valor", valor);
-            updateStats();
-        }
-
-        // Add this game loop to decay stats over time
-        function gameLoop() {
-            hunger = Math.max(0, hunger - hungerDecay);
-            thirst = Math.max(0, thirst - thirstDecay);
-            updateStats();
-            setTimeout(gameLoop, 1000); // Run every second
-        }
-
-        // Add feeding functions (call these from your store)
-        function feedZazu(amount) {
-            hunger = Math.min(100, hunger + amount);
-            updateStats();
-        }
-
-        function waterZazu(amount) {
-            thirst = Math.min(100, thirst + amount);
-            updateStats();
-        }
-
-        // Initialize the game loop after DOM loads
-        window.onload = function() {
-            gameLoop();
-            // Your existing initialization code
-            atualizarDebbie();
-            playDalgona();
-            setTimeout(triggerRandomEvent, 60000);
-        };
-
-            function atualizarDebbie() {
-                const dabby = document.querySelector(".debbiemons img");
-                if (localStorage.getItem("debbieComprado") === "true") {
-                    dabby.style.display = "block";
-                } else {
-                    dabby.style.display = "none";
+                if (!isAlive) {
+                    alert("Zazu needs food and water first!");
+                    return;
                 }
+                
+                valor += 1;
+                meow();
+                
+                // Small stat cost per click
+                hunger = Math.max(0, hunger - 1);
+                thirst = Math.max(0, thirst - 0.5);
+                
+                document.getElementById("contadas").textContent = valor;
+                updateStats(); // This will call saveStats()
             }
 
-            // Random Events System
+            // Random Events System (with cooldown)
             const events = [
                 {
                     name: "Rainbow Madness!",
                     action: () => {
-                        nyan()
+                        nyan();
                         document.body.classList.add("rainbow-bg");
                         setTimeout(() => document.body.classList.remove("rainbow-bg"), 10000);
                     }
@@ -202,7 +185,7 @@
                 {
                     name: "Earthquake!",
                     action: () => {
-                        quake
+                        quake();
                         document.body.classList.add("shake-screen");
                         setTimeout(() => document.body.classList.remove("shake-screen"), 500);
                     }
@@ -210,7 +193,7 @@
                 {
                     name: "Zazu is floating away!",
                     action: () => {
-                        float()
+                        float();
                         const zazu = document.getElementById("zazu");
                         zazu.classList.add("float-up");
                         setTimeout(() => {
@@ -222,7 +205,7 @@
                 {
                     name: "Debbie takes over!",
                     action: () => {
-                        tboi()
+                        tboi();
                         const debbie = document.getElementById("debbie");
                         debbie.style.transform = "scale(2)";
                         setTimeout(() => debbie.style.transform = "none", 3000);
@@ -233,7 +216,7 @@
                     action: () => {
                         const originalFn = aumentarValor;
                         aumentarValor = function() {
-                            db()
+                            db();
                             valor += 2;
                             meow();
                             document.getElementById("contadas").textContent = valor;
@@ -244,68 +227,79 @@
                 }
             ];
 
-            let isEventActive = false;
-            let eventTimeout = null;
-
             function triggerRandomEvent() {
-                // Don't trigger if another event is active
-    if (isEventActive) {
-        setTimeout(triggerRandomEvent, 30000); // Check again in 30 seconds
-        return;
-    }
+                if (isEventActive) {
+                    setTimeout(triggerRandomEvent, 30000);
+                    return;
+                }
 
-    const event = events[Math.floor(Math.random() * events.length)];
-    
-    // Mark event as active
-    isEventActive = true;
-    
-    // Create event notification
-    const eventElement = document.createElement("div");
-    eventElement.className = "random-event";
-    eventElement.textContent = event.name;
-    document.body.appendChild(eventElement);
-    
-    // Trigger event action
-    event.action();
-    
-    // Remove notification after animation
-    setTimeout(() => {
-        eventElement.remove();
-    }, 5000);
-    
-    // Set event cooldown
-    setTimeout(() => {
-        isEventActive = false;
-    }, 15000); // Minimum 15 seconds between events
-    
-    // Schedule next event (1-3 minutes)
-    const nextEventDelay = 60000 + Math.random() * 120000; // 1-3 minutes
-    eventTimeout = setTimeout(triggerRandomEvent, nextEventDelay);
-
-    // Add to triggerRandomEvent
-const cooldownDisplay = document.createElement("div");
-cooldownDisplay.className = "event-cooldown";
-document.body.appendChild(cooldownDisplay);
-
-let secondsLeft = 15;
-const countdown = setInterval(() => {
-    cooldownDisplay.textContent = `Next event in: ${secondsLeft}s`;
-    cooldownDisplay.style.display = 'block';
-    secondsLeft--;
-    
-    if (secondsLeft < 0) {
-        clearInterval(countdown);
-        cooldownDisplay.style.display = 'none';
-    }
-}, 1000);
-}
+                const event = events[Math.floor(Math.random() * events.length)];
+                isEventActive = true;
+                
+                // Create event notification
+                const eventElement = document.createElement("div");
+                eventElement.className = "random-event";
+                eventElement.textContent = event.name;
+                document.body.appendChild(eventElement);
+                
+                // Trigger event action
+                event.action();
+                
+                // Remove notification after animation
+                setTimeout(() => {
+                    eventElement.remove();
+                }, 5000);
+                
+                // Show cooldown timer
+                const cooldownDisplay = document.createElement("div");
+                cooldownDisplay.className = "event-cooldown";
+                document.body.appendChild(cooldownDisplay);
+                
+                let secondsLeft = 15;
+                const countdown = setInterval(() => {
+                    cooldownDisplay.textContent = `Next event in: ${secondsLeft}s`;
+                    cooldownDisplay.style.display = 'block';
+                    secondsLeft--;
+                    
+                    if (secondsLeft < 0) {
+                        clearInterval(countdown);
+                        cooldownDisplay.remove();
+                    }
+                }, 1000);
+                
+                // Set event cooldown
+                setTimeout(() => {
+                    isEventActive = false;
+                }, 15000);
+                
+                // Schedule next event (1-3 minutes)
+                const nextEventDelay = 60000 + Math.random() * 120000;
+                eventTimeout = setTimeout(triggerRandomEvent, nextEventDelay);
+            }
 
             // Initialize game
-            atualizarDebbie();
-            playDalgona();
-            
-            // Start random events after 2 minutes
-            setTimeout(triggerRandomEvent, 60000);
+            window.onload = function() {
+                statInterval = setInterval(gameLoop, 1000);
+                playDalgona();
+                setTimeout(triggerRandomEvent, 60000);
+                atualizarDebbie();
+            };
+
+            // Clean up on page unload
+            window.addEventListener("beforeunload", () => {
+                clearInterval(statInterval);
+                if (eventTimeout) clearTimeout(eventTimeout);
+                saveStats();
+            });
+
+            function atualizarDebbie() {
+                const dabby = document.querySelector(".debbiemons img");
+                if (localStorage.getItem("debbieComprado") === "true") {
+                    dabby.style.display = "block";
+                } else {
+                    dabby.style.display = "none";
+                }
+            }
         </script>
     </header>
 </body>

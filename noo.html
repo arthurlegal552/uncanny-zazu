@@ -25,10 +25,12 @@
             padding: 10px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            position: relative;
         }
-        .item:hover {
-            transform: translateY(-5px);
+        .item.disabled {
+            opacity: 0.6;
+            filter: grayscale(70%);
         }
         .item img {
             width: 50px;
@@ -49,8 +51,9 @@
             margin: 2px;
             font-size: 12px;
         }
-        button:hover {
-            opacity: 0.8;
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
         .equipped {
             border: 2px solid #47d1ff;
@@ -68,8 +71,19 @@
             color: #333;
             text-decoration: none;
         }
-        .back-link:hover {
-            text-decoration: underline;
+        .status-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -81,21 +95,33 @@
     <a href="home.html" class="back-link">← Go Back</a>
 
     <script>
-        // Item database
+        // Item database with enable/disable conditions
         const itemsDB = {
             "Fish": {
                 type: "consumable",
                 image: "images/fish.jpg",
                 effect: "Restores 50% hunger",
+                enabled: function() {
+                    // Fish can always be used if you have it
+                    return true;
+                },
                 action: function() {
                     let currentHunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
-                    currentHunger = Math.min(100, currentHunger + 50);
-                    localStorage.setItem("zazuHunger", currentHunger);
-                    alert("Zazu ate the fish! Hunger +50%");
-                    removeFromInventory("Fish");
+                    const newHunger = Math.min(100, currentHunger + 50);
+                    localStorage.setItem("zazuHunger", newHunger);
+                    
+                    // Remove one fish from inventory
+                    const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+                    const fishIndex = inventory.indexOf("Fish");
+                    if (fishIndex !== -1) {
+                        inventory.splice(fishIndex, 1);
+                        localStorage.setItem("inventario", JSON.stringify(inventory));
+                    }
+                    
+                    alert(`Zazu ate the fish! Hunger: ${newHunger}%`);
                     updateInventoryDisplay();
                     
-                    // Try to update game page if open
+                    // Update game page if open
                     const gamePage = window.opener || window.parent;
                     if (gamePage && typeof gamePage.feedZazu === 'function') {
                         gamePage.feedZazu(50);
@@ -106,21 +132,34 @@
                 type: "equippable",
                 image: "images/debbie.png",
                 effect: "Special companion",
-                equipped: localStorage.getItem("debbieEquipped") === "true",
+                enabled: function() {
+                    return localStorage.getItem("debbieComprado") === "true";
+                },
                 action: function() {
-                    const equipped = localStorage.getItem("debbieEquipped") === "true";
-                    localStorage.setItem("debbieEquipped", !equipped);
+                    const currentlyEquipped = localStorage.getItem("debbieEquipped") === "true";
+                    localStorage.setItem("debbieEquipped", !currentlyEquipped);
                     updateInventoryDisplay();
-                    alert(`Debbie ${!equipped ? "equipped" : "unequipped"}!`);
+                    alert(`Debbie ${!currentlyEquipped ? "equipped" : "unequipped"}!`);
                 }
             }
-            // Add more items here as needed
+            // Add more items as needed
         };
 
         // Initialize inventory
         document.addEventListener("DOMContentLoaded", () => {
+            // Make sure fish goes to inventory when bought
+            ensureFishInInventory();
             updateInventoryDisplay();
         });
+
+        function ensureFishInInventory() {
+            // Check if fish exists in inventory, if not add it
+            const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+            if (!inventory.includes("Fish") && localStorage.getItem("hasBoughtFish") === "true") {
+                inventory.push("Fish");
+                localStorage.setItem("inventario", JSON.stringify(inventory));
+            }
+        }
 
         function updateInventoryDisplay() {
             const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
@@ -133,29 +172,35 @@
                 return;
             }
 
-            // Count items first
+            // Count items
             const itemCounts = {};
             inventory.forEach(item => {
                 itemCounts[item] = (itemCounts[item] || 0) + 1;
             });
 
-            // Create UI for each unique item
+            // Create UI for each item type
             Object.keys(itemCounts).forEach(itemName => {
                 if (itemsDB[itemName]) {
                     const item = itemsDB[itemName];
+                    const isEnabled = item.enabled();
+                    const isEquipped = item.type === "equippable" && 
+                                      localStorage.getItem(`${itemName}Equipped`) === "true";
+                    
                     const itemEl = document.createElement("div");
-                    itemEl.className = `item ${item.equipped ? 'equipped' : ''}`;
+                    itemEl.className = `item ${isEquipped ? 'equipped' : ''} ${!isEnabled ? 'disabled' : ''}`;
                     
                     itemEl.innerHTML = `
+                        ${itemCounts[itemName] > 1 ? `<div class="status-badge">${itemCounts[itemName]}</div>` : ''}
                         <img src="${item.image}" alt="${itemName}">
                         <h3>${itemName}</h3>
                         <p>${item.effect}</p>
-                        <small>Quantity: ${itemCounts[itemName]}</small>
                         <div class="item-actions">
                             ${item.type === 'consumable' ? 
-                                `<button onclick="useItem('${itemName}')">Use</button>` : 
-                                `<button onclick="toggleEquip('${itemName}')">
-                                    ${item.equipped ? 'Unequip' : 'Equip'}
+                                `<button onclick="useItem('${itemName}')" ${!isEnabled ? 'disabled' : ''}>
+                                    Use
+                                </button>` : 
+                                `<button onclick="toggleEquip('${itemName}')" ${!isEnabled ? 'disabled' : ''}>
+                                    ${isEquipped ? 'Unequip' : 'Equip'}
                                 </button>`
                             }
                         </div>
@@ -173,19 +218,8 @@
         }
 
         function toggleEquip(itemName) {
-            if (itemsDB[itemName]) {
-                itemsDB[itemName].equipped = !itemsDB[itemName].equipped;
-                localStorage.setItem(`${itemName}Equipped`, itemsDB[itemName].equipped);
-                updateInventoryDisplay();
-            }
-        }
-
-        function removeFromInventory(itemName) {
-            const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
-            const index = inventory.indexOf(itemName);
-            if (index !== -1) {
-                inventory.splice(index, 1);
-                localStorage.setItem("inventario", JSON.stringify(inventory));
+            if (itemsDB[itemName] && itemsDB[itemName].enabled()) {
+                itemsDB[itemName].action();
             }
         }
     </script>

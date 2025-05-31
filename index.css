@@ -121,6 +121,24 @@ img {
   top: 20%;
 }
 
+/* Add to CSS */
+.frenzy-timer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: gold;
+  padding: 10px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 0 10px red;
+  z-index: 1001;
+}
+
 @keyframes eventFade {
   0% { opacity: 0; transform: translateY(-50px); }
   20% { opacity: 1; transform: translateY(0); }
@@ -130,6 +148,27 @@ img {
 
 .rainbow-bg {
   animation: rainbowBg 10s linear infinite;
+}
+
+.click-frenzy {
+  animation: frenzyGlow 0.3s infinite alternate;
+}
+
+@keyframes frenzyGlow {
+  to {
+    background-color: #ffe6e6;
+    box-shadow: 0 0 50px red inset;
+  }
+}
+
+.click-frenzy .center img {
+  animation: frenzyBounce 0.4s infinite;
+  filter: drop-shadow(0 0 5px gold);
+}
+
+@keyframes frenzyBounce {
+  0%, 100% { transform: translateY(0) scale(1.1); }
+  50% { transform: translateY(-20px) scale(1.2); }
 }
 
 @keyframes rainbowBg {

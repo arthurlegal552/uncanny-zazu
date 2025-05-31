@@ -4,42 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>zazu clicker</title>
-    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            color: black;
+            background-color: blanchedalmond;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Random Event Styles */
+        .random-event {
+            position: fixed;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            font-size: 24px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: eventFade 5s forwards;
+            top: 20%;
+        }
+
+        @keyframes eventFade {
+            0% { opacity: 0; transform: translateY(-50px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* Event-specific animations */
+        .rainbow-bg {
+            animation: rainbowBg 10s linear infinite;
+        }
+
+        @keyframes rainbowBg {
+            0% { background-color: #ff6b6b; }
+            14% { background-color: #ffb347; }
+            28% { background-color: #f9ff47; }
+            42% { background-color: #47ff5e; }
+            57% { background-color: #47d1ff; }
+            71% { background-color: #a347ff; }
+            85% { background-color: #ff47d1; }
+            100% { background-color: #ff6b6b; }
+        }
+
+        .shake-screen {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+
+        .float-up {
+            animation: floatUp 5s ease-in-out forwards;
+        }
+
+        @keyframes floatUp {
+            to { transform: translateY(-100vh); }
+        }
+
+        /* Your existing styles */
+        ul {
+            display: flex;
+            justify-content: space-between;
+            list-style-type: none;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .center img, .debbiemons img {
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .center img:hover, .debbiemons img:hover {
+            opacity: 0.9;
+        }
+
+        .estica {
+            animation: esticarImagem 1s infinite alternate;
+            transform-origin: bottom;
+        }
+
+        @keyframes esticarImagem {
+            0% { transform: scaleY(1); }
+            100% { transform: scaleY(1.3); }
+        }
+
+        .text {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-
     <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
-            <li>
-                <a href="welcom.html">store</a>
-            </li>
-            <li>
-                <a href="noo.html">actually dont click</a>
-            </li>
+            <li><a href="welcom.html">store</a></li>
+            <li><a href="noo.html">actually dont click</a></li>
         </ul>
     </nav>
     <header>
         <div class="center">
-            <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica">
+            <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica" id="zazu">
         </div>
-                <div class="debbiemons">
-            <img src="images/debbie.png" alt="Clique aqui" width="200" class="estica">
+        <div class="debbiemons">
+            <img src="images/debbie.png" alt="Debbie" width="200" class="estica" id="debbie">
         </div>
-        <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/hotel.mp3" preload="auto" preload="auto"></audio>
-        <audio id="mew" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/m-e-o-w.mp3" preload="auto" preload="auto"></audio>
+        <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/hotel.mp3" preload="auto"></audio>
+        <audio id="mew" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/m-e-o-w.mp3" preload="auto"></audio>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
             <h3>click any button to start</h3>
         </div>
+
         <script>
-            // Sempre que a página carregar, pega o valor do localStorage
+            // Game state
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("contadas").textContent = valor;
 
-                 function atualizarDebbie() {
-                const dabby = document.querySelector(".debbiemons img")
+            // Audio functions
+            function playDalgona() {
+                const dalgona = document.getElementById("dalgona");
+                dalgona.pause();
+                dalgona.currentTime = 0;
+                dalgona.loop = true;
+                dalgona.play();
+            }
+
+            function meow() {
+                const mew = document.getElementById("mew");
+                mew.pause();
+                mew.currentTime = 0;
+                mew.loop = false;
+                mew.play();
+            }
+
+            // Game functions
+            function aumentarValor() {
+                valor += 1;
+                meow();
+                document.getElementById("contadas").textContent = valor;
+                localStorage.setItem("valor", valor);
+            }
+
+            function atualizarDebbie() {
+                const dabby = document.querySelector(".debbiemons img");
                 if (localStorage.getItem("debbieComprado") === "true") {
                     dabby.style.display = "block";
                 } else {
@@ -47,32 +173,84 @@
                 }
             }
 
-            function playDalgona() {
-            const dalgona = document.getElementById("dalgona");
-            dalgona.pause();
-            dalgona.currentTime = 0;
-            dalgona.loop = true;
-            dalgona.play();
-        }
+            // Random Events System
+            const events = [
+                {
+                    name: "Rainbow Madness!",
+                    action: () => {
+                        document.body.classList.add("rainbow-bg");
+                        setTimeout(() => document.body.classList.remove("rainbow-bg"), 10000);
+                    }
+                },
+                {
+                    name: "Earthquake!",
+                    action: () => {
+                        document.body.classList.add("shake-screen");
+                        setTimeout(() => document.body.classList.remove("shake-screen"), 500);
+                    }
+                },
+                {
+                    name: "Zazu is floating away!",
+                    action: () => {
+                        const zazu = document.getElementById("zazu");
+                        zazu.classList.add("float-up");
+                        setTimeout(() => {
+                            zazu.classList.remove("float-up");
+                            zazu.style.transform = "none";
+                        }, 5000);
+                    }
+                },
+                {
+                    name: "Debbie takes over!",
+                    action: () => {
+                        const debbie = document.getElementById("debbie");
+                        debbie.style.transform = "scale(2)";
+                        setTimeout(() => debbie.style.transform = "none", 3000);
+                    }
+                },
+                {
+                    name: "Click Frenzy! Points x2 for 10 seconds!",
+                    action: () => {
+                        const originalFn = aumentarValor;
+                        aumentarValor = function() {
+                            valor += 2;
+                            meow();
+                            document.getElementById("contadas").textContent = valor;
+                            localStorage.setItem("valor", valor);
+                        };
+                        setTimeout(() => aumentarValor = originalFn, 10000);
+                    }
+                }
+            ];
 
-            function meow() {
-            const mew = document.getElementById("mew");
-            mew.pause();
-            mew.currentTime = 0;
-            mew.loop = false
-            mew.play();
-        }
-
-            function aumentarValor() {
-                valor += 1;
-                meow()
-                document.getElementById("contadas").textContent = valor;
-                localStorage.setItem("valor", valor); // Salva o novo valor
+            function triggerRandomEvent() {
+                const event = events[Math.floor(Math.random() * events.length)];
+                
+                // Create event notification
+                const eventElement = document.createElement("div");
+                eventElement.className = "random-event";
+                eventElement.textContent = event.name;
+                document.body.appendChild(eventElement);
+                
+                // Trigger event action
+                event.action();
+                
+                // Remove notification after animation
+                setTimeout(() => {
+                    eventElement.remove();
+                }, 5000);
+                
+                // Schedule next event
+                setTimeout(triggerRandomEvent, 120000); // 2 minutes
             }
-            atualizarDebbie()
-            playDalgona()
+
+            // Initialize game
+            atualizarDebbie();
+            playDalgona();
+            
+            // Start random events after 2 minutes
+            setTimeout(triggerRandomEvent, 10000);
         </script>
-        
     </header>
 </body>
 </html>

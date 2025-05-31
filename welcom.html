@@ -96,6 +96,7 @@
         // Add to inventory
         const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
         inventario.push("Fish");
+        localStorage.setItem("hasBoughtFish", "true");
         localStorage.setItem("inventario", JSON.stringify(inventario));
         atualizarInventario();
 

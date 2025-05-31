@@ -23,6 +23,11 @@
         </div>
         <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/hotel.mp3" preload="auto"></audio>
         <audio id="mew" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/m-e-o-w.mp3" preload="auto"></audio>
+        <audio id="db" src="https://www.myinstants.com/instant/double-points-mp3-8965/embed/" preload="auto"></audio>
+        <audio id="nyan" src="https://www.myinstants.com/instant/maxwell-the-cat-theme-18515/embed/" preload="auto"></audio>
+        <audio id="tboi" src="https://www.myinstants.com/instant/tantsulki-85875/embed/" preload="auto"></audio>
+        <audio id="float" src="https://www.myinstants.com/instant/floating-spongebob-92311/embed/" preload="auto"></audio>
+        <audio id="quake" src="https://www.myinstants.com/instant/earthquake-28938/embed/" preload="auto"></audio>
         <div class="text">
             <h1>this is zazu</h1>
             <h2>you can click him for points</h2>
@@ -51,6 +56,46 @@
                 mew.play();
             }
 
+                function db() {
+                const db = document.getElementById("db");
+                db.pause();
+                db.currentTime = 0;
+                db.loop = false;
+                db.play();
+            }
+                function nyan() {
+                const nyan = document.getElementById("nyan");
+                nyan.pause();
+                nyan.currentTime = 0;
+                nyan.loop = false;
+                nyan.play();
+            }
+
+            function tboi() {
+                const tboi = document.getElementById("tboi");
+                tboi.pause();
+                tboi.currentTime = 0;
+                tboi.loop = false;
+                tboi.play();
+            }
+
+            function float() {
+                const float = document.getElementById("float");
+                float.pause();
+                float.currentTime = 0;
+                float.loop = false;
+                float.play();
+            }
+
+            function quake() {
+                const quake = document.getElementById("quake");
+                quake.pause();
+                quake.currentTime = 0;
+                quake.loop = false;
+                quake.play();
+            }
+
+
             // Game functions
             function aumentarValor() {
                 valor += 1;
@@ -73,6 +118,7 @@
                 {
                     name: "Rainbow Madness!",
                     action: () => {
+                        nyan()
                         document.body.classList.add("rainbow-bg");
                         setTimeout(() => document.body.classList.remove("rainbow-bg"), 10000);
                     }
@@ -80,6 +126,7 @@
                 {
                     name: "Earthquake!",
                     action: () => {
+                        quake
                         document.body.classList.add("shake-screen");
                         setTimeout(() => document.body.classList.remove("shake-screen"), 500);
                     }
@@ -87,6 +134,7 @@
                 {
                     name: "Zazu is floating away!",
                     action: () => {
+                        float()
                         const zazu = document.getElementById("zazu");
                         zazu.classList.add("float-up");
                         setTimeout(() => {
@@ -98,6 +146,7 @@
                 {
                     name: "Debbie takes over!",
                     action: () => {
+                        tboi()
                         const debbie = document.getElementById("debbie");
                         debbie.style.transform = "scale(2)";
                         setTimeout(() => debbie.style.transform = "none", 3000);
@@ -108,6 +157,7 @@
                     action: () => {
                         const originalFn = aumentarValor;
                         aumentarValor = function() {
+                            db()
                             valor += 2;
                             meow();
                             document.getElementById("contadas").textContent = valor;

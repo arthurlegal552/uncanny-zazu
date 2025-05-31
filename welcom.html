@@ -28,6 +28,9 @@
     <div class="debbie">debbie: 10 zazas</div>
     </div>
 
+    <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto" preload="auto"></audio>
+    <audio id="buy" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/roblox-button-sfx.mp3" preload="auto" preload="auto"></audio>
+
     <!-- Inventário visível -->
     <div><strong>Inventário:</strong> <span id="inventario"></span></div>
 
@@ -66,6 +69,7 @@
             const dialogo = document.getElementById("fala");
             const img = document.querySelector(".vendedor img");
             const itemimg = document.querySelector(".debbieimg img");
+            playDalgona()
 
             if (valor < 10) {
                 dialogo.textContent = "you don't have enough zazas";
@@ -110,6 +114,21 @@
         alert("reseted");
     }
 }
+
+            function playDalgona() {
+            const dalgona = document.getElementById("shop");
+            dalgona.pause();
+            dalgona.currentTime = 0;
+            dalgona.loop = true;
+            dalgona.play();
+        }
+
+            function playbuy() {
+            const dalgona = document.getElementById("buy");
+            dalgona.pause();
+            dalgona.currentTime = 0;
+            dalgona.play();
+        }
 
     </script>
 </body>

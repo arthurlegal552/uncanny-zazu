@@ -272,4 +272,5 @@ img {
         }
         .disabled {
             filter: grayscale(70%);
-            opaci
+            opacity: 1.25;
+        }

@@ -2,27 +2,192 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>inventory</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Zazu's Inventory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: blanchedalmond;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .inventory-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .item:hover {
+            transform: translateY(-5px);
+        }
+        .item img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .item-actions {
+            margin-top: 10px;
+        }
+        button {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+            font-size: 12px;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .equipped {
+            border: 2px solid #47d1ff;
+            background: rgba(71, 209, 255, 0.1);
+        }
+        .empty-inventory {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Seu Inventário</h1>
-    <p id="inventario">loading...</p>
-    <a href="home.html">go back</a>
+    <h1>Zazu's Inventory</h1>
+    <div class="inventory-container" id="inventory-container">
+        <!-- Items will appear here -->
+    </div>
+    <a href="home.html" class="back-link">← Go Back</a>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-            const inventarioEl = document.getElementById("inventario");
-
-            if (inventario.length > 0) {
-                inventarioEl.textContent = inventario.join(", ");
-            } else {
-                inventarioEl.textContent = "Seu inventário está vazio!";
+        // Item database
+        const itemsDB = {
+            "Fish": {
+                type: "consumable",
+                image: "images/fish.jpg",
+                effect: "Restores 50% hunger",
+                action: function() {
+                    let currentHunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+                    currentHunger = Math.min(100, currentHunger + 50);
+                    localStorage.setItem("zazuHunger", currentHunger);
+                    alert("Zazu ate the fish! Hunger +50%");
+                    removeFromInventory("Fish");
+                    updateInventoryDisplay();
+                    
+                    // Try to update game page if open
+                    const gamePage = window.opener || window.parent;
+                    if (gamePage && typeof gamePage.feedZazu === 'function') {
+                        gamePage.feedZazu(50);
+                    }
+                }
+            },
+            "Debbie": {
+                type: "equippable",
+                image: "images/debbie.png",
+                effect: "Special companion",
+                equipped: localStorage.getItem("debbieEquipped") === "true",
+                action: function() {
+                    const equipped = localStorage.getItem("debbieEquipped") === "true";
+                    localStorage.setItem("debbieEquipped", !equipped);
+                    updateInventoryDisplay();
+                    alert(`Debbie ${!equipped ? "equipped" : "unequipped"}!`);
+                }
             }
+            // Add more items here as needed
+        };
+
+        // Initialize inventory
+        document.addEventListener("DOMContentLoaded", () => {
+            updateInventoryDisplay();
         });
+
+        function updateInventoryDisplay() {
+            const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+            const container = document.getElementById("inventory-container");
+            
+            container.innerHTML = "";
+
+            if (inventory.length === 0) {
+                container.innerHTML = `<div class="empty-inventory">Your inventory is empty!</div>`;
+                return;
+            }
+
+            // Count items first
+            const itemCounts = {};
+            inventory.forEach(item => {
+                itemCounts[item] = (itemCounts[item] || 0) + 1;
+            });
+
+            // Create UI for each unique item
+            Object.keys(itemCounts).forEach(itemName => {
+                if (itemsDB[itemName]) {
+                    const item = itemsDB[itemName];
+                    const itemEl = document.createElement("div");
+                    itemEl.className = `item ${item.equipped ? 'equipped' : ''}`;
+                    
+                    itemEl.innerHTML = `
+                        <img src="${item.image}" alt="${itemName}">
+                        <h3>${itemName}</h3>
+                        <p>${item.effect}</p>
+                        <small>Quantity: ${itemCounts[itemName]}</small>
+                        <div class="item-actions">
+                            ${item.type === 'consumable' ? 
+                                `<button onclick="useItem('${itemName}')">Use</button>` : 
+                                `<button onclick="toggleEquip('${itemName}')">
+                                    ${item.equipped ? 'Unequip' : 'Equip'}
+                                </button>`
+                            }
+                        </div>
+                    `;
+                    
+                    container.appendChild(itemEl);
+                }
+            });
+        }
+
+        function useItem(itemName) {
+            if (itemsDB[itemName] && itemsDB[itemName].action) {
+                itemsDB[itemName].action();
+            }
+        }
+
+        function toggleEquip(itemName) {
+            if (itemsDB[itemName]) {
+                itemsDB[itemName].equipped = !itemsDB[itemName].equipped;
+                localStorage.setItem(`${itemName}Equipped`, itemsDB[itemName].equipped);
+                updateInventoryDisplay();
+            }
+        }
+
+        function removeFromInventory(itemName) {
+            const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+            const index = inventory.indexOf(itemName);
+            if (index !== -1) {
+                inventory.splice(index, 1);
+                localStorage.setItem("inventario", JSON.stringify(inventory));
+            }
+        }
     </script>
 </body>
 </html>
-
-<title>inventory</title>

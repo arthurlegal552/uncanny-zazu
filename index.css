@@ -29,7 +29,7 @@ img {
 
 .creation {
             padding: 12px 24px;
-            background: transparent;
+            background: gray;
             color: black;
             border: 2px solid gray;
             border-radius: 4px;
@@ -39,14 +39,14 @@ img {
             transition: all 0.3s;
 }
 
-.creation :hover {
-  background: gray;
+.creation:hover {
+  transform: scale(1.02);
   color: white;
 }
 
 .inve {
             padding: 12px 24px;
-            background: transparent;
+            background: gray;
             color: black;
             border: 2px solid gray;
             border-radius: 4px;
@@ -56,8 +56,8 @@ img {
             transition: all 0.3s;
 }
 
-.inve :hover {
-  background: gray;
+.inve:hover {
+  transform: scale(1.02);
   color: white;
 }
 

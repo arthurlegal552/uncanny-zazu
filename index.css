@@ -28,9 +28,39 @@ img {
 }
 
 .creation {
-  border-top: 8px solid #bbb;
-  border-radius: 5px;
+            padding: 12px 24px;
+            background: transparent;
+            color: gray;
+            border: 2px solid gray;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
 }
+
+.creation :hover {
+  background: gray;
+  color: white;
+}
+
+.inve {
+            padding: 12px 24px;
+            background: transparent;
+            color: gray;
+            border: 2px solid gray;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
+}
+
+.inve :hover {
+  background: gray;
+  color: white;
+}
+
 
 /* Add to your CSS */
 .event-cooldown {

@@ -74,36 +74,6 @@ img {
     display: none;
 }
 
-.food-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        transition: transform 0.2s;
-    }
-    .food-item:hover {
-        transform: scale(1.02);
-        background: rgba(255,255,255,0.3);
-    }
-    .foodimg {
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-    }
-    .food-text {
-        flex-grow: 1;
-    }
-    .purchase-animation {
-        animation: bounce 0.4s;
-    }
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
-
 /* Center Styles */
 .center {
   text-align: center;
@@ -122,36 +92,6 @@ img {
   text-align: center;
 }
 
-.debbieal {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        transition: transform 0.2s;
-    }
-    .debbieal:hover {
-        transform: scale(1.02);
-        background: rgba(255,255,255,0.3);
-    }
-    .debbieimg {
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-    }
-    .debbie {
-        flex-grow: 1;
-    }
-    .purchase-animation {
-        animation: bounce 0.4s;
-    }
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
-
 /* Debbie Styles */
 .debbiemons {
   text-align: center;
@@ -165,12 +105,6 @@ img {
   animation: esticarImagem 1s infinite alternate;
   transform-origin: bottom;
   cursor: pointer;
-}
-
-.vendedorestica {
-  width: 200px;
-  animation: shake 0.4s infinite ease-in-out;
-  transform-origin: bottom;
 }
 
 /* Keyframes */

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Zazu Store</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="loja.css">
 </head>
 <body>
-    <p>Seus zazas: <span id="outraTelaContador">0</span></p>
+    <p class="currency-display">Seus zazas: <span id="outraTelaContador">0</span></p>
 
     <div class="vendedor">
         <img src="images/zazu guy.jpg" alt="fella" onclick="buy()">
@@ -14,13 +14,16 @@
 
     <button onclick="resetarInventario()">Resetar Inventário</button>
 
-    <div class="texthat"><h1 id="fala"></h1></div>
+    <div class="speech-bubble">
+        <h1 id="fala"></h1>
+    </div>
 
     <nav>
         <ul>
             <li><a href="home.html">go back</a></li>
         </ul>
     </nav>
+    
     <div class="debbieal">
         <img src="images/debbie.png" alt="scarys" class="debbieimg" onclick="buyDebbie()">
         <div class="debbie">debbie:10 zazas</div>
@@ -37,28 +40,82 @@
     <div><strong>Inventário:</strong> <span id="inventario"></span></div>
 
     <script>
+        // Animation control variables
+        let isTyping = false;
+        let currentAnimation = null;
+        let currentTimeout = null;
+        let lastClickTime = 0;
+        const DEBOUNCE_TIME = 500;
+
+        // Dialogue phrases
+        const frases = ["Yo...", "Are you still up?", "How about getting more zazas?", "Whatever...", "Need something?", "Come back soon..."];
+
+        // Initialize on load
         document.addEventListener("DOMContentLoaded", () => {
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
 
             if (localStorage.getItem("debbieComprado") === "true") {
-                const dialogo = document.getElementById("fala");
-                dialogo.textContent = "Já comprado!";
                 document.querySelector(".debbieimg").style.pointerEvents = "none";
             }
+            
             playDalgona();
             atualizarInventario();
+            startRandomDialogue();
         });
 
-        const fala = document.getElementById("fala");
-        const frases = ["yo", "are you still up?", "how about get more zazas?", "whatever"];
-        let index = 0;
+        // Typewriter effect
+        function typeWriter(text, element, callback) {
+            if (currentAnimation) {
+                clearTimeout(currentAnimation);
+                element.classList.remove("typing");
+                element.textContent = "";
+            }
+            
+            isTyping = true;
+            element.classList.add("typing");
+            let i = 0;
+            element.textContent = "";
+            
+            function typing() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    currentAnimation = setTimeout(typing, 50);
+                } else {
+                    element.classList.remove("typing");
+                    isTyping = false;
+                    currentAnimation = null;
+                    if (callback) callback();
+                }
+            }
+            
+            typing();
+        }
 
-        setInterval(() => {
-            fala.textContent = frases[index];
-            index = (index + 1) % frases.length;
-        }, 10000);
+        // Dialogue system
+        function startRandomDialogue() {
+            clearTimeout(currentTimeout);
+            const randomIndex = Math.floor(Math.random() * frases.length);
+            const dialogo = document.getElementById("fala");
+            
+            typeWriter(frases[randomIndex], dialogo, () => {
+                currentTimeout = setTimeout(startRandomDialogue, 10000);
+            });
+        }
 
+        function showTemporaryMessage(message, duration = 3000) {
+            if (isTyping) return;
+            
+            clearTimeout(currentTimeout);
+            const dialogo = document.getElementById("fala");
+            
+            typeWriter(message, dialogo, () => {
+                currentTimeout = setTimeout(startRandomDialogue, duration);
+            });
+        }
+
+        // Inventory functions
         function atualizarInventario() {
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             const inventoryDisplay = [];
@@ -76,11 +133,16 @@
                 inventoryDisplay.length > 0 ? inventoryDisplay.join(", ") : "Empty";
         }
 
+        // Purchase functions
         function buyFood() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) return;
+            lastClickTime = now;
+            
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             
             if (valor < 15) {
-                document.getElementById("fala").textContent = "Not enough zazas!";
+                showTemporaryMessage("Not enough zazas!");
                 return;
             }
 
@@ -93,29 +155,32 @@
             localStorage.setItem("inventario", JSON.stringify(inventario));
             localStorage.setItem("hasBoughtFish", "true");
 
-            document.getElementById("fala").textContent = "Bought fish!";
+            showTemporaryMessage("Bought fish!");
             playbuy();
             atualizarInventario();
         }
 
         function buyDebbie() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) return;
+            lastClickTime = now;
+            
             let valor = parseInt(localStorage.getItem("valor")) || 0;
-            const dialogo = document.getElementById("fala");
             const img = document.querySelector(".vendedor img");
             const itemimg = document.querySelector(".debbieimg");
 
             if (valor < 10) {
-                dialogo.textContent = "you don't have enough zazas";
+                showTemporaryMessage("You don't have enough zazas");
                 return;
             }
 
             if (localStorage.getItem("debbieComprado") === "true") {
-                dialogo.textContent = "you already bought that";
+                showTemporaryMessage("You already bought that");
                 return;
             }
 
             valor -= 10;
-            dialogo.textContent = "thank you";
+            showTemporaryMessage("Thank you for your purchase!");
             playbuy();
             img.classList.add("vendedorestica");
 
@@ -132,8 +197,9 @@
             document.getElementById("outraTelaContador").textContent = valor;
         }
 
+        // Utility functions
         function resetarInventario() {
-            if (confirm("do you wanna do that fr?")) {
+            if (confirm("Are you sure you want to reset your inventory?")) {
                 localStorage.removeItem("debbieComprado");
                 localStorage.removeItem("inventario");
                 localStorage.removeItem("hasBoughtFish");
@@ -142,8 +208,7 @@
                 document.getElementById("outraTelaContador").textContent = "0";
                 document.getElementById("inventario").textContent = "Empty";
                 document.querySelector(".debbieimg").style.pointerEvents = "auto";
-                document.getElementById("fala").textContent = "restarted";
-                alert("reseted");
+                showTemporaryMessage("Inventory reset!");
             }
         }
 

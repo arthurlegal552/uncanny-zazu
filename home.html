@@ -48,59 +48,85 @@
         </div>
 
         <script>
-               let valor = parseInt(localStorage.getItem("valor")) || 0;
-    let hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
-    let thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
-    let isAlive = true;
-    const hungerDecay = 0.5; // Percentage points lost per second
-    const thirstDecay = 0.3; // Percentage points lost per second
-
-    // Modified game loop to prevent values going below 0
-    function gameLoop() {
-        // Only decay if above 0
-        if (hunger > 0) hunger = Math.max(0, hunger - hungerDecay);
-        if (thirst > 0) thirst = Math.max(0, thirst - thirstDecay);
-        updateStats();
-    }
-
-    // Modified click function to prevent stat reduction when at 0
-    function aumentarValor() {
-        if (!isAlive) {
-            alert("Zazu needs food and water first!");
-            return;
+         // 1. ADD THIS SAVE FUNCTION
+        function saveGameState() {
+            localStorage.setItem("valor", valor.toString());
+            localStorage.setItem("zazuHunger", hunger.toString());
+            localStorage.setItem("zazuThirst", thirst.toString());
         }
-        
-        valor += 1;
-        meow();
-        
-        // Only reduce stats if above 0
-        if (hunger > 0) hunger = Math.max(0, hunger - 1);
-        if (thirst > 0) thirst = Math.max(0, thirst - 0.5);
-        
-        document.getElementById("contadas").textContent = valor;
-        updateStats();
-    }
 
-    // Update stats display (unchanged but included for completeness)
-    function updateStats() {
-        // These will now never show below 0
-        document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
-        document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
-        document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
-        document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
-        
-        // Check if Zazu is too hungry/thirsty
-        if ((hunger <= 0 || thirst <= 0) && isAlive) {
-            isAlive = false;
-            document.getElementById("zazu").classList.add("disabled");
-            alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
-        } else if (hunger > 0 && thirst > 0 && !isAlive) {
-            isAlive = true;
-            document.getElementById("zazu").classList.remove("disabled");
+        // 2. MODIFY YOUR EXISTING FUNCTIONS
+        let valor = parseInt(localStorage.getItem("valor")) || 0;
+        let hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+        let thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
+        let isAlive = true;
+        const hungerDecay = 0.5;
+        const thirstDecay = 0.3;
+
+        function gameLoop() {
+            if (hunger > 0) hunger = Math.max(0, hunger - hungerDecay);
+            if (thirst > 0) thirst = Math.max(0, thirst - thirstDecay);
+            updateStats();
+            saveGameState(); // ADD THIS LINE
         }
-        
-        saveStats();
-    }
+
+        function aumentarValor() {
+            if (!isAlive) {
+                alert("Zazu needs food and water first!");
+                return;
+            }
+            
+            valor += 1;
+            meow();
+            
+            if (hunger > 0) hunger = Math.max(0, hunger - 1);
+            if (thirst > 0) thirst = Math.max(0, thirst - 0.5);
+            
+            document.getElementById("contadas").textContent = valor;
+            updateStats();
+            saveGameState(); // ADD THIS LINE
+        }
+
+        function updateStats() {
+            document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
+            document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
+            document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
+            document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
+            
+            if ((hunger <= 0 || thirst <= 0) && isAlive) {
+                isAlive = false;
+                document.getElementById("zazu").classList.add("disabled");
+                alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
+            } else if (hunger > 0 && thirst > 0 && !isAlive) {
+                isAlive = true;
+                document.getElementById("zazu").classList.remove("disabled");
+            }
+            
+            saveGameState(); // ADD THIS LINE
+        }
+
+        // 3. ADD BEFOREUNLOAD LISTENER
+        window.addEventListener("beforeunload", function() {
+            saveGameState();
+        });
+
+        // 4. MODIFY INITIALIZATION
+        window.onload = function() {
+            // Load initial values
+            valor = parseInt(localStorage.getItem("valor")) || 0;
+            hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+            thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
+            
+            // Update displays
+            document.getElementById("contadas").textContent = valor;
+            updateStats();
+            
+            // Start game systems
+            statInterval = setInterval(gameLoop, 1000);
+            playDalgona();
+            setTimeout(triggerRandomEvent, 60000);
+            atualizarDebbie();
+        };
             // Game loop for stat decay
             function gameLoop() {
                 hunger = Math.max(0, hunger - hungerDecay);

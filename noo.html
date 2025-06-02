@@ -116,8 +116,8 @@
         const itemsDB = {
             "Fish": {
                 type: "consumable",
-                image: "images/fish.jpg",
-                effect: "Restores 50% hunger",
+                image: "images/lunch.jpg",
+                effect: "a big lunch",
                 enabled: function() {
                     const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
                     return inventory.includes("Fish");

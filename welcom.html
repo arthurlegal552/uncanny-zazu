@@ -34,10 +34,11 @@
         <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
     </div>
 
-    <div class="wata">
-        <img src="images/wata.jpg" alt="Fish" class="wataimg" onclick="buyFood()">
-        <div class="watatxt">water : 10 zazas (Restores 50% hunger)</div>
-    </div>
+    <!-- Change the water item section to this: -->
+<div class="wata">
+    <img src="images/wata.jpg" alt="Water" class="wataimg" onclick="buywata()">
+    <div class="watatxt">water: 10 zazas (Restores 50% thirst)</div>
+</div>
 
     <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto"></audio>
     <audio id="buy" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/roblox-button-sfx.mp3" preload="auto"></audio>
@@ -165,31 +166,32 @@
             atualizarInventario();
         }
 
-        function buywata() {
-            const now = Date.now();
-            if (now - lastClickTime < DEBOUNCE_TIME) return;
-            lastClickTime = now;
-            
-            let valor = parseInt(localStorage.getItem("valor")) || 0;
-            
-            if (valor < 15) {
-                showTemporaryMessage("Not enough zazas!");
-                return;
-            }
+        // Update the buywata function to this:
+function buywata() {
+    const now = Date.now();
+    if (now - lastClickTime < DEBOUNCE_TIME) return;
+    lastClickTime = now;
+    
+    let valor = parseInt(localStorage.getItem("valor")) || 0;
+    
+    if (valor < 10) {  // Changed from 15 to match UI
+        showTemporaryMessage("Not enough zazas!");
+        return;
+    }
 
-            valor -= 15;
-            localStorage.setItem("valor", valor);
-            document.getElementById("outraTelaContador").textContent = valor;
+    valor -= 10;  // Changed from 15 to match UI
+    localStorage.setItem("valor", valor);
+    document.getElementById("outraTelaContador").textContent = valor;
 
-            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
-            inventario.push("Fish");
-            localStorage.setItem("inventario", JSON.stringify(inventario));
-            localStorage.setItem("haswater", "true");
+    const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+    inventario.push("water");  // Changed from "Fish" to "water"
+    localStorage.setItem("inventario", JSON.stringify(inventario));
+    localStorage.setItem("haswater", "true");
 
-            showTemporaryMessage("Bought water!");
-            playbuy();
-            atualizarInventario();
-        }
+    showTemporaryMessage("Bought water!");
+    playbuy();
+    atualizarInventario();
+}
 
         function buyDebbie() {
             const now = Date.now();

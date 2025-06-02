@@ -7,7 +7,6 @@
     <title>zazu clicker</title>
 </head>
 <body>
-    <!-- Your HTML remains unchanged -->
     <p>zaza: <span id="contadas">0</span></p>
     <nav>
         <ul>
@@ -16,100 +15,307 @@
         </ul>
     </nav>
     <header>
-        <!-- ... rest of your HTML ... -->
-    </header>
+        <div class="center">
+            <img src="images/me.jpeg" alt="Clique aqui" width="200" onclick="aumentarValor()" class="estica" id="zazu">
+        </div>
+        <div class="debbiemons">
+            <img src="images/debbie.png" alt="Debbie" width="200" class="estica" id="debbie">
+        </div>
 
-    <script>
-        // Game state variables
-        let valor = 0;
-        let hunger = 100;
-        let thirst = 100;
-        let isAlive = true;
-        let statInterval;
-        let eventTimeout;
-        let isEventActive = false;
-        const hungerDecay = 0.5;
-        const thirstDecay = 0.3;
+        <div class="stats">
+        <h3>Zazu's Stats</h3>
+        <div>Hunger: <span id="hunger-value">100</span>%</div>
+        <div class="stat-bar">
+            <div id="hunger-fill" class="stat-fill"></div>
+        </div>
+        <div>Thirst: <span id="thirst-value">100</span>%</div>
+        <div class="stat-bar">
+            <div id="thirst-fill" class="stat-fill"></div>
+        </div>
+    </div>
 
-        // Save game state to localStorage
-        function saveGameState() {
-            localStorage.setItem("valor", valor.toString());
-            localStorage.setItem("zazuHunger", hunger.toString());
-            localStorage.setItem("zazuThirst", thirst.toString());
-            localStorage.setItem("lastSave", Date.now().toString());
-        }
+        <audio id="dalgona" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/hotel.mp3" preload="auto"></audio>
+        <audio id="mew" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/m-e-o-w.mp3" preload="auto"></audio>
+        <audio id="db" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/double-points-mp3.mp3" preload="auto"></audio>
+        <audio id="nyan" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/maxwell-the-cat-theme.mp3" preload="auto"></audio>
+        <audio id="tboi" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/tantsulki.mp3" preload="auto"></audio>
+        <audio id="float" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/tmpylco0ee7.mp3" preload="auto"></audio>
+        <audio id="quake" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/skill_spell_earthquake_01-23.mp3" preload="auto"></audio>
+        <div class="text">
+            <h1>this is zazu</h1>
+            <h2>you can click him for points</h2>
+            <h3>click any button to start</h3>
+        </div>
 
-        // Load game state from localStorage
-        function loadGameState() {
-            valor = parseInt(localStorage.getItem("valor")) || 0;
-            hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
-            thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
-            
-            // Update UI with loaded values
-            document.getElementById("contadas").textContent = valor;
-            updateStats();
-        }
+        <script>
+            // Game state variables
+            let valor = 0;
+            let hunger = 100;
+            let thirst = 100;
+            let isAlive = true;
+            let statInterval;
+            let eventTimeout;
+            let isEventActive = false;
+            const hungerDecay = 0.5;
+            const thirstDecay = 0.3;
 
-        // Update stats display - MODIFIED TO ALLOW ZERO VALUES
-        function updateStats() {
-            // Allow values to stay at zero but not go below
-            hunger = Math.max(0, hunger);
-            thirst = Math.max(0, thirst);
-            
-            document.getElementById("hunger-value").textContent = hunger.toFixed(0);
-            document.getElementById("thirst-value").textContent = thirst.toFixed(0);
-            document.getElementById("hunger-fill").style.width = hunger + '%';
-            document.getElementById("thirst-fill").style.width = thirst + '%';
-            
-            // Show warning but don't prevent clicking
-            if ((hunger <= 0 || thirst <= 0) && isAlive) {
-                isAlive = true; // Changed to keep allowing clicks
-                document.getElementById("zazu").classList.add("disabled");
-                // Only show alert if this is a new state change
-                if (hunger <= 0 || thirst <= 0) {
-                    alert("Zazu is hungry or thirsty! Feed him to keep him happy!");
-                }
-            } else if (hunger > 0 && thirst > 0) {
-                document.getElementById("zazu").classList.remove("disabled");
+            // Save game state to localStorage
+            function saveGameState() {
+                localStorage.setItem("valor", valor.toString());
+                localStorage.setItem("zazuHunger", hunger.toString());
+                localStorage.setItem("zazuThirst", thirst.toString());
+                localStorage.setItem("lastSave", Date.now().toString());
             }
-            
-            saveGameState();
-        }
 
-        // Game loop for stat decay - MODIFIED TO ALLOW ZERO VALUES
-        function gameLoop() {
-            if (hunger > 0) hunger = Math.max(0, hunger - hungerDecay);
-            if (thirst > 0) thirst = Math.max(0, thirst - thirstDecay);
-            updateStats();
-        }
+            // Load game state from localStorage
+            function loadGameState() {
+                valor = parseInt(localStorage.getItem("valor")) || 0;
+                hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
+                thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
+                
+                // Update UI with loaded values
+                document.getElementById("contadas").textContent = valor;
+                updateStats();
+            }
 
-        // Main click function - MODIFIED TO ALLOW CLICKING AT ZERO
-        function aumentarValor() {
-            valor += 1;
-            meow();
-            
-            // Still reduce stats but they can stay at zero
-            hunger = Math.max(0, hunger - 1);
-            thirst = Math.max(0, thirst - 0.5);
-            
-            document.getElementById("contadas").textContent = valor;
-            updateStats();
-        }
+            // Update stats display
+            function updateStats() {
+                document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
+                document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
+                document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
+                document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
+                
+                // Check if Zazu is alive
+                if ((hunger <= 0 || thirst <= 0) && isAlive) {
+                    isAlive = false;
+                    document.getElementById("zazu").classList.add("disabled");
+                    alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
+                } else if (hunger > 0 && thirst > 0 && !isAlive) {
+                    isAlive = true;
+                    document.getElementById("zazu").classList.remove("disabled");
+                }
+                
+                saveGameState();
+            }
 
-        // Rest of your functions remain the same (audio, events, etc.)
-        // ... [keep all your existing audio and event functions] ...
+            // Game loop for stat decay
+            function gameLoop() {
+                hunger = Math.max(0, hunger - hungerDecay);
+                thirst = Math.max(0, thirst - thirstDecay);
+                updateStats();
+            }
 
-        // Initialize game
-        window.onload = function() {
-            loadGameState();
-            statInterval = setInterval(gameLoop, 1000);
-            playDalgona();
-            setTimeout(triggerRandomEvent, 60000);
-            atualizarDebbie();
-        };
+            // Main click function
+            function aumentarValor() {
+                if (!isAlive) {
+                    alert("Zazu needs food and water first!");
+                    return;
+                }
+                
+                valor += 1;
+                meow();
+                
+                // Small stat cost per click
+                hunger = Math.max(0, hunger - 1);
+                thirst = Math.max(0, thirst - 0.5);
+                
+                document.getElementById("contadas").textContent = valor;
+                updateStats();
+            }
 
-        // Save on page unload
-        window.addEventListener("beforeunload", saveGameState);
-    </script>
+            // Audio functions
+            function playDalgona() {
+                const dalgona = document.getElementById("dalgona");
+                dalgona.pause();
+                dalgona.currentTime = 0;
+                dalgona.loop = true;
+                dalgona.play();
+            }
+
+            function meow() {
+                const mew = document.getElementById("mew");
+                mew.pause();
+                mew.currentTime = 0;
+                mew.loop = false;
+                mew.play();
+            }
+
+            function db() {
+                const db = document.getElementById("db");
+                db.pause();
+                db.currentTime = 0;
+                db.loop = false;
+                db.play();
+            }
+
+            function nyan() {
+                const nyan = document.getElementById("nyan");
+                nyan.pause();
+                nyan.currentTime = 0;
+                nyan.loop = false;
+                nyan.play();
+            }
+
+            function tboi() {
+                const tboi = document.getElementById("tboi");
+                tboi.pause();
+                tboi.currentTime = 0;
+                tboi.loop = false;
+                tboi.play();
+            }
+
+            function float() {
+                const float = document.getElementById("float");
+                float.pause();
+                float.currentTime = 0;
+                float.loop = false;
+                float.play();
+            }
+
+            function quake() {
+                const quake = document.getElementById("quake");
+                quake.pause();
+                quake.currentTime = 0;
+                quake.loop = false;
+                quake.play();
+            }
+
+            // Random Events System
+            const events = [
+                {
+                    name: "Rainbow Madness!",
+                    action: () => {
+                        nyan();
+                        document.getElementById("dalgona").pause();
+                        document.body.classList.add("rainbow-bg");
+                        setTimeout(() => document.body.classList.remove("rainbow-bg"), 10000);
+                        playDalgona();
+                    }
+                },
+                {
+                    name: "Earthquake!",
+                    action: () => {
+                        quake();
+                        document.getElementById("dalgona").pause();
+                        document.body.classList.add("shake-screen");
+                        setTimeout(() => document.body.classList.remove("shake-screen"), 500);
+                        playDalgona();
+                    }
+                },
+                {
+                    name: "Zazu is floating away!",
+                    action: () => {
+                        float();
+                        document.getElementById("dalgona").pause();
+                        const zazu = document.getElementById("zazu");
+                        zazu.classList.add("float-up");
+                        setTimeout(() => {
+                            zazu.classList.remove("float-up");
+                            zazu.style.transform = "none";
+                        }, 5000);
+                        playDalgona();
+                    }
+                },
+                {
+                    name: "Debbie takes over!",
+                    action: () => {
+                        tboi();
+                        document.getElementById("dalgona").pause();
+                        const debbie = document.getElementById("debbie");
+                        debbie.style.transform = "scale(2)";
+                        setTimeout(() => debbie.style.transform = "none", 3000);
+                        playDalgona();
+                    }
+                },
+                {
+                    name: "Click Frenzy! Points x2 for 10 seconds!",
+                    action: () => {
+                        const originalFn = aumentarValor;
+                        aumentarValor = function() {
+                            db();
+                            document.getElementById("dalgona").pause();
+                            valor += 2;
+                            meow();
+                            document.getElementById("contadas").textContent = valor;
+                            saveGameState();
+                        };
+                        setTimeout(() => aumentarValor = originalFn, 10000);
+                        playDalgona();
+                    }
+                }
+            ];
+
+            function triggerRandomEvent() {
+                if (isEventActive) {
+                    setTimeout(triggerRandomEvent, 30000);
+                    return;
+                }
+
+                const event = events[Math.floor(Math.random() * events.length)];
+                isEventActive = true;
+                
+                // Create event notification
+                const eventElement = document.createElement("div");
+                eventElement.className = "random-event";
+                eventElement.textContent = event.name;
+                document.body.appendChild(eventElement);
+                
+                // Trigger event action
+                event.action();
+                
+                // Remove notification after animation
+                setTimeout(() => {
+                    eventElement.remove();
+                }, 5000);
+                
+                // Show cooldown timer
+                const cooldownDisplay = document.createElement("div");
+                cooldownDisplay.className = "event-cooldown";
+                document.body.appendChild(cooldownDisplay);
+                
+                let secondsLeft = 15;
+                const countdown = setInterval(() => {
+                    cooldownDisplay.textContent = `Next event in: ${secondsLeft}s`;
+                    cooldownDisplay.style.display = 'block';
+                    secondsLeft--;
+                    
+                    if (secondsLeft < 0) {
+                        clearInterval(countdown);
+                        cooldownDisplay.remove();
+                    }
+                }, 1000);
+                
+                // Set event cooldown
+                setTimeout(() => {
+                    isEventActive = false;
+                }, 15000);
+                
+                // Schedule next event (1-3 minutes)
+                const nextEventDelay = 60000 + Math.random() * 120000;
+                eventTimeout = setTimeout(triggerRandomEvent, nextEventDelay);
+            }
+
+            function atualizarDebbie() {
+                const dabby = document.querySelector(".debbiemons img");
+                if (localStorage.getItem("debbieComprado") === "true") {
+                    dabby.style.display = "block";
+                } else {
+                    dabby.style.display = "none";
+                }
+            }
+
+            // Initialize game
+            window.onload = function() {
+                loadGameState(); // Load saved state first
+                statInterval = setInterval(gameLoop, 1000);
+                playDalgona();
+                setTimeout(triggerRandomEvent, 60000);
+                atualizarDebbie();
+            };
+
+            // Save on page unload
+            window.addEventListener("beforeunload", saveGameState);
+        </script>
+    </header>
 </body>
 </html>

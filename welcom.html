@@ -34,7 +34,6 @@
         <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
     </div>
 
-    <!-- Add the water item here -->
     <div class="water-item">
         <img src="images/wata.jpg" alt="Water" class="waterimg" onclick="buyWater()">
         <div class="water-text">Water: 10 zazas (Restores 50% thirst)</div>
@@ -46,6 +45,16 @@
     <div><strong>Inventário:</strong> <span id="inventario"></span></div>
 
     <script>
+        // Storage synchronization
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'valor') {
+                document.getElementById('outraTelaContador').textContent = event.newValue || '0';
+            }
+            if (event.key === 'inventario') {
+                atualizarInventario();
+            }
+        });
+
         // Animation control variables
         let isTyping = false;
         let currentAnimation = null;
@@ -58,9 +67,8 @@
 
         // Initialize on load
         document.addEventListener("DOMContentLoaded", () => {
-            const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
-            document.getElementById("outraTelaContador").textContent = valorSalvo;
-
+            updateCurrencyDisplay();
+            
             if (localStorage.getItem("debbieComprado") === "true") {
                 document.querySelector(".debbieimg").style.pointerEvents = "none";
             }
@@ -68,7 +76,19 @@
             playDalgona();
             atualizarInventario();
             startRandomDialogue();
+            
+            // Periodic sync check (every 2 seconds)
+            setInterval(() => {
+                updateCurrencyDisplay();
+                atualizarInventario();
+            }, 2000);
         });
+
+        // Update currency display
+        function updateCurrencyDisplay() {
+            const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
+            document.getElementById("outraTelaContador").textContent = valorSalvo;
+        }
 
         // Typewriter effect
         function typeWriter(text, element, callback) {
@@ -153,8 +173,8 @@
             }
 
             valor -= 15;
-            localStorage.setItem("valor", valor);
-            document.getElementById("outraTelaContador").textContent = valor;
+            localStorage.setItem("valor", valor.toString());
+            updateCurrencyDisplay();
 
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             inventario.push("Fish");
@@ -166,7 +186,6 @@
             atualizarInventario();
         }
 
-        // Add this new function for buying water
         function buyWater() {
             const now = Date.now();
             if (now - lastClickTime < DEBOUNCE_TIME) return;
@@ -180,8 +199,8 @@
             }
 
             valor -= 10;
-            localStorage.setItem("valor", valor);
-            document.getElementById("outraTelaContador").textContent = valor;
+            localStorage.setItem("valor", valor.toString());
+            updateCurrencyDisplay();
 
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             inventario.push("Water");
@@ -213,6 +232,9 @@
             }
 
             valor -= 10;
+            localStorage.setItem("valor", valor.toString());
+            updateCurrencyDisplay();
+            
             showTemporaryMessage("Thank you for your purchase!");
             playbuy();
             img.classList.add("vendedorestica");
@@ -222,12 +244,10 @@
                 itemimg.style.pointerEvents = "none";
             }, 400);
 
-            localStorage.setItem("valor", valor);
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             inventario.push("Debbie");
             localStorage.setItem("inventario", JSON.stringify(inventario));
             atualizarInventario();
-            document.getElementById("outraTelaContador").textContent = valor;
         }
 
         // Utility functions

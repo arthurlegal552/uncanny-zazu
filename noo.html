@@ -164,7 +164,38 @@
                         debbieItem.classList.toggle('disabled', currentlyEquipped);
                     }
                 }
-            }
+            },
+           "water": {
+    type: "consumable",
+    image: "images/wata.jpg",
+    effect: "Restores 50% thirst",
+    enabled: function() {
+        const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+        return inventory.includes("water");
+    },
+    action: function() {
+        // Remove one water from inventory
+        const inventory = JSON.parse(localStorage.getItem("inventario")) || [];
+        const waterIndex = inventory.indexOf("water");
+        if (waterIndex !== -1) {
+            inventory.splice(waterIndex, 1);
+            localStorage.setItem("inventario", JSON.stringify(inventory));
+        }
+        
+        // Update thirst (corrected from hunger)
+        let currentThirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
+        currentThirst = Math.min(100, currentThirst + 50);
+        localStorage.setItem("zazuThirst", currentThirst);
+        
+        updateInventoryDisplay();
+        
+        // Update game page if open
+        const gamePage = window.opener || window.parent;
+        if (gamePage && typeof gamePage.feedZazu === 'function') {
+            gamePage.feedZazu(50);
+        }
+    }
+}
         };
 
         // Initialize inventory

@@ -7,23 +7,22 @@ body {
 }
 
 .goback {
-            padding: 12px 24px;
-            background: gray;
-            color: black;
-            border: 2px solid gray;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s;
-            text-decoration: none;
+    padding: 12px 24px;
+    background: gray;
+    color: black;
+    border: 2px solid gray;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: all 0.3s;
+    text-decoration: none;
 }
 
 .goback:hover {
-  transform: scale(1.02);
-  color: white;
+    transform: scale(1.02);
+    color: white;
 }
-
 
 /* Currency Display */
 .currency-display {
@@ -37,65 +36,96 @@ body {
     font-size: 1.2em;
 }
 
+/* Food Item */
 .food-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        transition: transform 0.2s;
-    }
-    .food-item:hover {
-        transform: scale(1.02);
-        background: rgba(255,255,255,0.3);
-    }
-    .foodimg {
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-    }
-    .food-text {
-        flex-grow: 1;
-    }
-    .purchase-animation {
-        animation: bounce 0.4s;
-    }
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
 
+.food-item:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.3);
+}
+
+.foodimg {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.food-text {
+    flex-grow: 1;
+}
+
+/* Debbie Item */
 .debbieal {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        transition: transform 0.2s;
-    }
-    .debbieal:hover {
-        transform: scale(1.02);
-        background: rgba(255,255,255,0.3);
-    }
-    .debbieimg {
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-    }
-    .debbie {
-        flex-grow: 1;
-    }
-    .purchase-animation {
-        animation: bounce 0.4s;
-    }
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.debbieal:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.3);
+}
+
+.debbieimg {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.debbie {
+    flex-grow: 1;
+}
+
+/* Water Item - New */
+.water-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.water-item:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.3);
+}
+
+.waterimg {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.water-text {
+    flex-grow: 1;
+}
+
+/* Shared Animation */
+.purchase-animation {
+    animation: bounce 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
 
 /* Vendor Styling */
 .vendedor {
@@ -156,24 +186,24 @@ body {
 }
 
 /* Product Styling */
-.debbieal, .food-item {
+.debbieal, .food-item, .water-item {
     text-align: center;
     margin: 30px auto;
     max-width: 200px;
 }
 
-.debbieimg, .foodimg {
+.debbieimg, .foodimg, .waterimg {
     width: 100%;
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.3s;
 }
 
-.debbieimg:hover, .foodimg:hover {
+.debbieimg:hover, .foodimg:hover, .waterimg:hover {
     transform: scale(1.1);
 }
 
-.debbie, .food-text {
+.debbie, .food-text, .water-text {
     margin-top: 10px;
     font-weight: bold;
 }

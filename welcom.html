@@ -20,7 +20,7 @@
 
     <nav>
         <ul>
-            <li><a href="home.html" class="goback" >go back</a></li>
+            <li><a href="home.html" class="goback">go back</a></li>
         </ul>
     </nav>
     
@@ -32,6 +32,12 @@
     <div class="food-item">
         <img src="images/fish.jpg" alt="Fish" class="foodimg" onclick="buyFood()">
         <div class="food-text">Fish: 15 zazas (Restores 50% hunger)</div>
+    </div>
+
+    <!-- Add the water item here -->
+    <div class="water-item">
+        <img src="images/wata.jpg" alt="Water" class="waterimg" onclick="buyWater()">
+        <div class="water-text">Water: 10 zazas (Restores 50% thirst)</div>
     </div>
 
     <audio id="shop" src="https://github.com/arthurlegal552/uncanny-zazu/raw/main/sounds/02_shop-channel-audiotrimmer.mp3" preload="auto"></audio>
@@ -160,6 +166,33 @@
             atualizarInventario();
         }
 
+        // Add this new function for buying water
+        function buyWater() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) return;
+            lastClickTime = now;
+            
+            let valor = parseInt(localStorage.getItem("valor")) || 0;
+            
+            if (valor < 10) {
+                showTemporaryMessage("Not enough zazas!");
+                return;
+            }
+
+            valor -= 10;
+            localStorage.setItem("valor", valor);
+            document.getElementById("outraTelaContador").textContent = valor;
+
+            const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+            inventario.push("Water");
+            localStorage.setItem("inventario", JSON.stringify(inventario));
+            localStorage.setItem("hasBoughtWater", "true");
+
+            showTemporaryMessage("Bought water!");
+            playbuy();
+            atualizarInventario();
+        }
+
         function buyDebbie() {
             const now = Date.now();
             if (now - lastClickTime < DEBOUNCE_TIME) return;
@@ -203,6 +236,7 @@
                 localStorage.removeItem("debbieComprado");
                 localStorage.removeItem("inventario");
                 localStorage.removeItem("hasBoughtFish");
+                localStorage.removeItem("hasBoughtWater");
                 localStorage.setItem("valor", "0");
 
                 document.getElementById("outraTelaContador").textContent = "0";

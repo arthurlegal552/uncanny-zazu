@@ -178,37 +178,45 @@
                     name: "Rainbow Madness!",
                     action: () => {
                         nyan();
+                        dalgona.pause()
                         document.body.classList.add("rainbow-bg");
                         setTimeout(() => document.body.classList.remove("rainbow-bg"), 10000);
+                        playDalgona()
                     }
                 },
                 {
                     name: "Earthquake!",
                     action: () => {
                         quake();
+                        dalgona.pause()
                         document.body.classList.add("shake-screen");
                         setTimeout(() => document.body.classList.remove("shake-screen"), 500);
+                        playDalgona()
                     }
                 },
                 {
                     name: "Zazu is floating away!",
                     action: () => {
                         float();
+                        dalgona.pause()
                         const zazu = document.getElementById("zazu");
                         zazu.classList.add("float-up");
                         setTimeout(() => {
                             zazu.classList.remove("float-up");
                             zazu.style.transform = "none";
                         }, 5000);
+                        playDalgona()
                     }
                 },
                 {
                     name: "Debbie takes over!",
                     action: () => {
                         tboi();
+                        dalgona.pause()
                         const debbie = document.getElementById("debbie");
                         debbie.style.transform = "scale(2)";
                         setTimeout(() => debbie.style.transform = "none", 3000);
+                        playDalgona()
                     }
                 },
                 {
@@ -217,12 +225,14 @@
                         const originalFn = aumentarValor;
                         aumentarValor = function() {
                             db();
+                            dalgona.pause()
                             valor += 2;
                             meow();
                             document.getElementById("contadas").textContent = valor;
                             localStorage.setItem("valor", valor);
                         };
                         setTimeout(() => aumentarValor = originalFn, 10000);
+                        playDalgona()
                     }
                 }
             ];

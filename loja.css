@@ -6,6 +6,24 @@ body {
     padding: 20px;
 }
 
+.goback {
+            padding: 12px 24px;
+            background: gray;
+            color: black;
+            border: 2px solid gray;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
+}
+
+.goback:hover {
+  transform: scale(1.02);
+  color: white;
+}
+
+
 /* Currency Display */
 .currency-display {
     position: fixed;

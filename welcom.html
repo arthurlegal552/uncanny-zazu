@@ -50,6 +50,11 @@
         // Dialogue phrases
         const frases = ["Yo...", "Are you still up?", "How about getting more zazas?", "Whatever...", "Need something?", "Come back soon..."];
 
+        // Debbie passive income variables
+        let debbieIncomeInterval;
+        const DEBBIE_INCOME_AMOUNT = 200;
+        const DEBBIE_INCOME_INTERVAL = 120000; // 2 minutes in milliseconds
+
         // Initialize on load
         document.addEventListener("DOMContentLoaded", () => {
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
@@ -57,12 +62,30 @@
 
             if (localStorage.getItem("debbieComprado") === "true") {
                 document.querySelector(".debbieimg").style.pointerEvents = "none";
+                startDebbieIncome();
             }
             
             playDalgona();
             atualizarInventario();
             startRandomDialogue();
         });
+
+        // Start Debbie's passive income
+        function startDebbieIncome() {
+            // Clear any existing interval
+            if (debbieIncomeInterval) {
+                clearInterval(debbieIncomeInterval);
+            }
+            
+            // Start new interval
+            debbieIncomeInterval = setInterval(() => {
+                let valor = parseInt(localStorage.getItem("valor")) || 0;
+                valor += DEBBIE_INCOME_AMOUNT;
+                localStorage.setItem("valor", valor);
+                document.getElementById("outraTelaContador").textContent = valor;
+                showTemporaryMessage("Debbie gave you 200 zazas!");
+            }, DEBBIE_INCOME_INTERVAL);
+        }
 
         // Typewriter effect
         function typeWriter(text, element, callback) {
@@ -187,6 +210,7 @@
             setTimeout(() => {
                 localStorage.setItem("debbieComprado", "true");
                 itemimg.style.pointerEvents = "none";
+                startDebbieIncome(); // Start the passive income when Debbie is bought
             }, 400);
 
             localStorage.setItem("valor", valor);
@@ -204,6 +228,11 @@
                 localStorage.removeItem("inventario");
                 localStorage.removeItem("hasBoughtFish");
                 localStorage.setItem("valor", "0");
+
+                // Stop Debbie's income if active
+                if (debbieIncomeInterval) {
+                    clearInterval(debbieIncomeInterval);
+                }
 
                 document.getElementById("outraTelaContador").textContent = "0";
                 document.getElementById("inventario").textContent = "Empty";

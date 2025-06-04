@@ -27,6 +27,25 @@ img {
   object-fit: contain;
 }
 
+.debbie-bonus {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    animation: fadeInOut 2s ease-in-out;
+    z-index: 1000;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
 .creation {
             padding: 12px 24px;
             background: gray;

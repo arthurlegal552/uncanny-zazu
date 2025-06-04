@@ -56,6 +56,7 @@
             let statInterval;
             let eventTimeout;
             let isEventActive = false;
+            let debbieInterval;
             const hungerDecay = 0.5;
             const thirstDecay = 0.3;
 
@@ -103,6 +104,26 @@
                 hunger = Math.max(0, hunger - hungerDecay);
                 thirst = Math.max(0, thirst - thirstDecay);
                 updateStats();
+            }
+
+            // Debbie's auto-clicker function
+            function debbieAutoClick() {
+                if (document.getElementById("debbie").style.display !== "none") {
+                    valor += 200;
+                    document.getElementById("contadas").textContent = valor;
+                    db(); // Play Debbie sound
+                    saveGameState();
+                    
+                    // Show Debbie's contribution
+                    const debbieBonus = document.createElement("div");
+                    debbieBonus.className = "debbie-bonus";
+                    debbieBonus.textContent = "+200 from Debbie!";
+                    document.body.appendChild(debbieBonus);
+                    
+                    setTimeout(() => {
+                        debbieBonus.remove();
+                    }, 2000);
+                }
             }
 
             // Main click function
@@ -299,8 +320,17 @@
                 const dabby = document.querySelector(".debbiemons img");
                 if (localStorage.getItem("debbieComprado") === "true") {
                     dabby.style.display = "block";
+                    // Start Debbie's auto-clicker if not already running
+                    if (!debbieInterval) {
+                        debbieInterval = setInterval(debbieAutoClick, 120000); // 2 minutes = 120000ms
+                    }
                 } else {
                     dabby.style.display = "none";
+                    // Stop Debbie's auto-clicker if running
+                    if (debbieInterval) {
+                        clearInterval(debbieInterval);
+                        debbieInterval = null;
+                    }
                 }
             }
 

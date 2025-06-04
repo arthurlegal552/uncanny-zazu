@@ -25,7 +25,7 @@
     </nav>
     
     <div class="debbieal">
-        <img src="images/debbie.png" alt="scarys" class="debbieimg" onclick="buyDebbie()">
+        <img src="images/debbie.png" alt="scarys" class="debbieimg" id="debbieButton" onclick="buyDebbie()">
         <div class="debbie">debbie:10 zazas</div>
     </div>
 
@@ -50,25 +50,32 @@
         // Dialogue phrases
         const frases = ["Yo...", "Are you still up?", "How about getting more zazas?", "Whatever...", "Need something?", "Come back soon..."];
 
-        // Debbie passive income variables
-        let debbieIncomeInterval;
-        const DEBBIE_INCOME_AMOUNT = 200;
-        const DEBBIE_INCOME_INTERVAL = 120000; // 2 minutes in milliseconds
-
         // Initialize on load
         document.addEventListener("DOMContentLoaded", () => {
             const valorSalvo = parseInt(localStorage.getItem("valor")) || 0;
             document.getElementById("outraTelaContador").textContent = valorSalvo;
-
-            if (localStorage.getItem("debbieComprado") === "true") {
-                document.querySelector(".debbieimg").style.pointerEvents = "none";
-                startDebbieIncome();
-            }
+            
+            // Update Debbie button state based on purchase status
+            updateDebbieButton();
             
             playDalgona();
             atualizarInventario();
             startRandomDialogue();
         });
+
+        function updateDebbieButton() {
+            const debbieButton = document.getElementById("debbieButton");
+            if (localStorage.getItem("debbieComprado") === "true") {
+                debbieButton.style.opacity = "0.5";
+                debbieButton.style.pointerEvents = "none";
+                debbieButton.title = "Already purchased";
+            } else {
+                debbieButton.style.opacity = "1";
+                debbieButton.style.pointerEvents = "auto";
+                debbieButton.title = "";
+            }
+        }
+
         // Typewriter effect
         function typeWriter(text, element, callback) {
             if (currentAnimation) {
@@ -172,7 +179,6 @@
             
             let valor = parseInt(localStorage.getItem("valor")) || 0;
             const img = document.querySelector(".vendedor img");
-            const itemimg = document.querySelector(".debbieimg");
 
             if (valor < 10) {
                 showTemporaryMessage("You don't have enough zazas");
@@ -180,22 +186,25 @@
             }
 
             if (localStorage.getItem("debbieComprado") === "true") {
-                showTemporaryMessage("You already bought that");
+                showTemporaryMessage("You already bought Debbie!");
                 return;
             }
 
             valor -= 10;
             localStorage.setItem("debbieComprado", "true");
-            showTemporaryMessage("Thank you for your purchase!");
-            playbuy();
-            img.classList.add("vendedorestica");
-
             localStorage.setItem("valor", valor);
+            
             const inventario = JSON.parse(localStorage.getItem("inventario")) || [];
             inventario.push("Debbie");
             localStorage.setItem("inventario", JSON.stringify(inventario));
-            atualizarInventario();
+            
+            showTemporaryMessage("Thank you for purchasing Debbie!");
+            playbuy();
+            img.classList.add("vendedorestica");
+            
             document.getElementById("outraTelaContador").textContent = valor;
+            atualizarInventario();
+            updateDebbieButton();
         }
 
         // Utility functions
@@ -206,14 +215,9 @@
                 localStorage.removeItem("hasBoughtFish");
                 localStorage.setItem("valor", "0");
 
-                // Stop Debbie's income if active
-                if (debbieIncomeInterval) {
-                    clearInterval(debbieIncomeInterval);
-                }
-
                 document.getElementById("outraTelaContador").textContent = "0";
                 document.getElementById("inventario").textContent = "Empty";
-                document.querySelector(".debbieimg").style.pointerEvents = "auto";
+                updateDebbieButton();
                 showTemporaryMessage("Inventory reset!");
             }
         }

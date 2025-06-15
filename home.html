@@ -51,6 +51,184 @@
         </div>
 
         <script>
+            // ================== Multiplayer Battle System ==================
+// WebSocket variables
+let socket;
+let roomId = null;
+let isHost = false;
+let opponentConnected = false;
+let inBattle = false;
+let battleClicks = 0;
+let opponentClicks = 0;
+let battleTimer = 30;
+let battleInterval;
+
+// Initialize WebSocket connection
+function initWebSocket() {
+  // For testing: ws://localhost:8080 (if running local server)
+  // For production: wss://your-websocket-server.com
+  const wsUrl = "ws://localhost:8080"; 
+  socket = new WebSocket(wsUrl);
+
+  socket.onopen = function() {
+    console.log("Connected to battle server");
+    document.getElementById("battleButton").disabled = false;
+  };
+
+  socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log("Received:", data);
+    
+    switch(data.type) {
+      case "roomCreated":
+        roomId = data.roomId;
+        isHost = true;
+        showMessage(`Room created! ID: ${roomId} - Share this with your opponent`);
+        break;
+        
+      case "playerJoined":
+        opponentConnected = true;
+        showMessage("Opponent joined! Ready to battle");
+        break;
+        
+      case "battleStarted":
+        startBattle();
+        break;
+        
+      case "opponentClick":
+        opponentClicks = data.count;
+        document.getElementById("opponentClicks").textContent = opponentClicks;
+        break;
+        
+      case "battleResult":
+        endBattle(data.result);
+        break;
+        
+      case "error":
+        showMessage(data.message);
+        break;
+    }
+  };
+
+  socket.onclose = function() {
+    showMessage("Disconnected from server");
+  };
+}
+
+// Battle functions
+function createBattleRoom() {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify({ type: "createRoom" }));
+  }
+}
+
+function joinBattleRoom() {
+  const joinId = prompt("Enter Battle Room ID:");
+  if (joinId && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify({ 
+      type: "joinRoom", 
+      roomId: joinId 
+    }));
+  }
+}
+
+function startBattle() {
+  inBattle = true;
+  battleClicks = 0;
+  opponentClicks = 0;
+  battleTimer = 30;
+  
+  document.getElementById("battleArea").style.display = "block";
+  document.getElementById("battleButton").style.display = "none";
+  document.getElementById("playerClicks").textContent = "0";
+  document.getElementById("opponentClicks").textContent = "0";
+  
+  battleInterval = setInterval(() => {
+    battleTimer--;
+    document.getElementById("battleTimer").textContent = battleTimer;
+    
+    if (battleTimer <= 0) {
+      endBattle();
+    }
+  }, 1000);
+}
+
+function endBattle(result) {
+  clearInterval(battleInterval);
+  inBattle = false;
+  
+  if (!result) {
+    result = battleClicks > opponentClicks ? "You win! +1000 points" : 
+             battleClicks < opponentClicks ? "You lose!" : "It's a tie! +500 points";
+    
+    // Award points
+    if (result.includes("win")) valor += 1000;
+    if (result.includes("tie")) valor += 500;
+    document.getElementById("contadas").textContent = valor;
+  }
+  
+  document.getElementById("battleResult").textContent = result;
+  document.getElementById("battleButton").style.display = "block";
+}
+
+// Modify your click function
+function aumentarValor() {
+  if (inBattle) {
+    battleClicks++;
+    document.getElementById("playerClicks").textContent = battleClicks;
+    
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: "playerClick",
+        roomId: roomId,
+        count: battleClicks
+      }));
+    }
+    return;
+  }
+  
+  // Original click logic
+  if (!isAlive) {
+    alert("Zazu needs food and water first!");
+    return;
+  }
+  
+  valor += 1;
+  meow();
+  hunger = Math.max(0, hunger - 1);
+  thirst = Math.max(0, thirst - 0.5);
+  document.getElementById("contadas").textContent = valor;
+  updateStats();
+}
+
+// Helper function
+function showMessage(msg) {
+  const msgEl = document.createElement("div");
+  msgEl.className = "battle-message";
+  msgEl.textContent = msg;
+  document.body.appendChild(msgEl);
+  setTimeout(() => msgEl.remove(), 3000);
+}
+
+// Initialize when page loads
+window.onload = function() {
+  loadGameState();
+  statInterval = setInterval(gameLoop, 1000);
+  playDalgona();
+  setTimeout(triggerRandomEvent, 60000);
+  atualizarDebbie();
+  initWebSocket(); // Initialize WebSocket connection
+  
+  // Battle button handler
+  document.getElementById("battleButton").addEventListener("click", function() {
+    if (confirm("Create new battle? (OK = Create Room, Cancel = Join Room)")) {
+      createBattleRoom();
+    } else {
+      joinBattleRoom();
+    }
+  });
+};
+
             // Game state variables
             let valor = 0;
             let hunger = 100;

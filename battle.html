@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- Add this modal for room selection -->
+<div id="battleModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Multiplayer Battle</h3>
+    <button id="createRoomBtn" class="modal-btn">Create Room</button>
+    <button id="joinRoomBtn" class="modal-btn">Join Room</button>
+    <div id="roomSection" style="display: none;">
+      <p>Room ID: <span id="roomIdDisplay"></span></p>
+      <p>Share this ID with your opponent!</p>
+      <p>Players: <span id="playerCount">1</span>/2</p>
+      <button id="startBattleBtn" class="modal-btn" disabled>Start Battle</button>
+    </div>
+    <div id="joinSection" style="display: none;">
+      <input type="text" id="roomIdInput" placeholder="Enter Room ID">
+      <button id="confirmJoinBtn" class="modal-btn">Join</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

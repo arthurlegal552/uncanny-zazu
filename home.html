@@ -55,6 +55,14 @@
   </div>
 </div>
 
+<div id="battleArea" style="display:none; background:#ffebee; padding:15px; border-radius:10px; margin:20px auto; max-width:300px; text-align:center;">
+  <h3>Battle Mode</h3>
+  <div>Time Left: <span id="battleTimer">30</span>s</div>
+  <div>Your Clicks: <span id="playerClicks">0</span></div>
+  <div>Opponent Clicks: <span id="opponentClicks">0</span></div>
+  <div id="battleResult" style="font-weight:bold; margin-top:10px;"></div>
+</div>
+
 <!-- Change your battle button to this (remove the <a> tag) -->
 <button id="battleButton" class="battle-btn">Start Multiplayer Battle</button>
 
@@ -76,6 +84,7 @@
   <div style="background:white; margin:100px auto; padding:20px; width:300px; border-radius:10px; text-align:center;">
 
         <script>
+            let originalClick = aumentarValor; // Reference to original click function
             // Game state variables
             let valor = 0;
             let hunger = 100;
@@ -87,6 +96,54 @@
             let debbieInterval;
             const hungerDecay = 0.5;
             const thirstDecay = 0.3;
+
+            
+function startBattle() {
+  inBattle = true;
+  battleClicks = 0;
+  opponentClicks = 0;
+  document.getElementById("playerClicks").textContent = "0";
+  document.getElementById("opponentClicks").textContent = "0";
+  document.getElementById("battleResult").textContent = "";
+  document.getElementById("battleArea").style.display = "block";
+  
+  // Start 30-second timer
+  battleTimer = 30;
+  battleInterval = setInterval(() => {
+    battleTimer--;
+    document.getElementById("battleTimer").textContent = battleTimer;
+    if (battleTimer <= 0) endBattle();
+  }, 1000);
+}
+
+// Initialize multiplayer when page loads
+window.onload = function() {
+  loadGameState();
+  statInterval = setInterval(gameLoop, 1000);
+  playDalgona();
+  setTimeout(triggerRandomEvent, 60000);
+  atualizarDebbie();
+  
+  // Initialize PeerJS
+  initPeerJS();
+  
+  // Set up modal buttons
+  document.getElementById("battleButton").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.getElementById("battleModal").style.display = "block";
+  });
+  
+  document.querySelector(".close").addEventListener("click", function() {
+    document.getElementById("battleModal").style.display = "none";
+  });
+  
+  document.getElementById("createRoomBtn").addEventListener("click", createRoom);
+  document.getElementById("joinRoomBtn").addEventListener("click", function() {
+    document.getElementById("joinSection").style.display = "block";
+  });
+  document.getElementById("confirmJoinBtn").addEventListener("click", joinRoom);
+};
+            
 // PeerJS connection
 let peer;
 let conn;

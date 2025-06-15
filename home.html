@@ -84,170 +84,139 @@
             let debbieInterval;
             const hungerDecay = 0.5;
             const thirstDecay = 0.3;
-// Multiplayer variables
-            let peer;
-            let conn;
-            let inBattle = false;
-            let battleClicks = 0;
-            let opponentClicks = 0;
-            let battleTimer = 30;
-            let battleInterval;
-            let originalClick = aumentarValor; // Save original click function
-            
-            // Initialize PeerJS connection
-            function initPeerJS() {
-                peer = new Peer(Math.random().toString(36).substring(2, 8));
-                
-                peer.on('open', (id) => {
-                    console.log("My peer ID is: " + id);
-                    document.getElementById("battleButton").disabled = false;
-                });
-                
-                peer.on('connection', (connection) => {
-                    conn = connection;
-                    setupConnection();
-                    document.getElementById("playerCount").textContent = "2";
-                });
-                
-                peer.on('error', (err) => {
-                    console.error('PeerJS error:', err);
-                    alert("Connection error: " + err.message);
-                });
-            }
-            
-            function setupConnection() {
-                conn.on('open', () => {
-                    alert("Connected to opponent! Battle starting...");
-                    startBattle();
-                });
-                
-                conn.on('data', (data) => {
-                    if (data.type === 'click') {
-                        opponentClicks = data.count;
-                        document.getElementById("opponentClicks").textContent = opponentClicks;
-                    }
-                });
-                
-                conn.on('close', () => {
-                    endBattle("Opponent disconnected!");
-                });
-            }
-            
-            function connectToPeer(peerId) {
-                conn = peer.connect(peerId);
-                setupConnection();
-            }
-            
-            function createRoom() {
-                const myId = peer.id;
-                document.getElementById("roomIdDisplay").textContent = myId;
-                document.getElementById("roomSection").style.display = "block";
-                document.getElementById("joinSection").style.display = "none";
-            }
-            
-            function joinRoom() {
-                const peerId = document.getElementById("roomIdInput").value.trim();
-                if (peerId) {
-                    connectToPeer(peerId);
-                } else {
-                    alert("Please enter a room ID");
-                }
-            }
-            
-            function startBattle() {
-                inBattle = true;
-                battleClicks = 0;
-                opponentClicks = 0;
-                battleTimer = 30;
-                
-                document.getElementById("battleModal").style.display = "none";
-                document.getElementById("battleArea").style.display = "block";
-                document.getElementById("playerClicks").textContent = "0";
-                document.getElementById("opponentClicks").textContent = "0";
-                document.getElementById("battleResult").textContent = "";
-                
-                battleInterval = setInterval(() => {
-                    battleTimer--;
-                    document.getElementById("battleTimer").textContent = battleTimer;
-                    
-                    if (battleTimer <= 0) {
-                        endBattle();
-                    }
-                }, 1000);
-            }
-            
-            function endBattle(result) {
-                clearInterval(battleInterval);
-                inBattle = false;
-                
-                if (!result) {
-                    result = battleClicks > opponentClicks ? "You win! +1000 points" : 
-                             battleClicks < opponentClicks ? "You lose!" : "It's a tie! +500 points";
-                    
-                    if (result.includes("win")) valor += 1000;
-                    if (result.includes("tie")) valor += 500;
-                    document.getElementById("contadas").textContent = valor;
-                }
-                
-                document.getElementById("battleResult").textContent = result;
-                
-                if (conn) {
-                    conn.close();
-                }
-            }
-            
-            // Modified click function
-            function aumentarValor() {
-                if (inBattle) {
-                    battleClicks++;
-                    document.getElementById("playerClicks").textContent = battleClicks;
-                    
-                    if (conn && conn.open) {
-                        conn.send({ type: 'click', count: battleClicks });
-                    }
-                    return;
-                }
-                
-                // Original click logic
-                if (!isAlive) {
-                    alert("Zazu needs food and water first!");
-                    return;
-                }
-                
-                valor += 1;
-                meow();
-                hunger = Math.max(0, hunger - 1);
-                thirst = Math.max(0, thirst - 0.5);
-                document.getElementById("contadas").textContent = valor;
-                updateStats();
-            }
-            
-            // Initialize game
-            window.onload = function() {
-                loadGameState();
-                statInterval = setInterval(gameLoop, 1000);
-                playDalgona();
-                setTimeout(triggerRandomEvent, 60000);
-                atualizarDebbie();
-                initPeerJS();
-                
-                // Set up event listeners
-                document.getElementById("battleButton").addEventListener("click", function() {
-                    document.getElementById("battleModal").style.display = "block";
-                });
-                
-                document.querySelector(".close").addEventListener("click", function() {
-                    document.getElementById("battleModal").style.display = "none";
-                });
-                
-                document.getElementById("createRoomBtn").addEventListener("click", createRoom);
-                document.getElementById("joinRoomBtn").addEventListener("click", function() {
-                    document.getElementById("joinSection").style.display = "block";
-                    document.getElementById("roomSection").style.display = "none";
-                });
-                
-                document.getElementById("confirmJoinBtn").addEventListener("click", joinRoom);
-            };
+// PeerJS connection
+let peer;
+let conn;
+let inBattle = false;
+let battleClicks = 0;
+let opponentClicks = 0;
+
+function initPeerJS() {
+  // Create a random peer ID
+  peer = new Peer(Math.random().toString(36).substring(2, 8));
+  
+  peer.on('open', (id) => {
+    document.getElementById("battleButton").disabled = false;
+    console.log("PeerJS ready! ID:", id);
+  });
+  
+  peer.on('connection', (connection) => {
+    conn = connection;
+    setupConnection();
+  });
+}
+
+function connectToPeer(peerId) {
+  conn = peer.connect(peerId);
+  setupConnection();
+}
+
+function setupConnection() {
+  conn.on('open', () => {
+    alert("Connected to opponent!");
+    startBattle();
+  });
+  
+  conn.on('data', (data) => {
+    if (data.type === 'click') {
+      opponentClicks = data.count;
+      document.getElementById("opponentClicks").textContent = opponentClicks;
+    }
+  });
+}
+
+// Modify your battle functions:
+function createRoom() {
+  const myId = peer.id;
+  document.getElementById("roomIdDisplay").textContent = myId;
+  document.getElementById("roomSection").style.display = "block";
+}
+
+function joinRoom() {
+  const peerId = document.getElementById("roomIdInput").value;
+  connectToPeer(peerId);
+}
+
+function startBattle() {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify({ 
+      type: "startBattle", 
+      roomId: roomId 
+    }));
+  }
+}
+
+function beginBattle() {
+  inBattle = true;
+  battleClicks = 0;
+  opponentClicks = 0;
+  battleTimer = 30;
+  
+  document.getElementById("battleModal").style.display = "none";
+  document.getElementById("battleArea").style.display = "block";
+  
+  battleInterval = setInterval(() => {
+    battleTimer--;
+    document.getElementById("battleTimer").textContent = battleTimer;
+    
+    if (battleTimer <= 0) {
+      endBattle();
+    }
+  }, 1000);
+}
+
+function endBattle(result) {
+  clearInterval(battleInterval);
+  inBattle = false;
+  
+  if (!result) {
+    result = battleClicks > opponentClicks ? "You win! +1000 points" : 
+             battleClicks < opponentClicks ? "You lose!" : "It's a tie! +500 points";
+    if (result.includes("win")) valor += 1000;
+    if (result.includes("tie")) valor += 500;
+    document.getElementById("contadas").textContent = valor;
+  }
+  
+  document.getElementById("battleResult").textContent = result;
+}
+
+document.getElementById("battleButton").addEventListener("click", function(e) {
+  e.preventDefault();
+  document.getElementById("battleModal").style.display = "block";
+  if (!socket) initWebSocket();
+});
+
+// Add close button functionality
+document.querySelector(".close").addEventListener("click", function() {
+  document.getElementById("battleModal").style.display = "none";
+});
+
+// Make sure these elements exist in your modal HTML:
+document.getElementById("createRoomBtn").addEventListener("click", createRoom);
+document.getElementById("joinRoomBtn").addEventListener("click", function() {
+  document.getElementById("joinSection").style.display = "block";
+  document.getElementById("roomSection").style.display = "none";
+});
+document.getElementById("confirmJoinBtn").addEventListener("click", joinRoom);
+document.getElementById("startBattleBtn").addEventListener("click", startBattle);
+
+// Modify your click function
+const originalClick = aumentarValor;
+aumentarValor = function() {
+  if (inBattle) {
+    battleClicks++;
+    document.getElementById("playerClicks").textContent = battleClicks;
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: "playerClick",
+        roomId: roomId,
+        count: battleClicks
+      }));
+    }
+    return;
+  }
+  originalClick();
+};
             
 
             // Save game state to localStorage

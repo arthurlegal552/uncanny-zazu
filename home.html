@@ -21,9 +21,9 @@
         <div class="debbiemons">
             <img src="images/debbie.png" alt="Debbie" width="200" class="estica" id="debbie">
         </div>
-        <a href="battle.html">
-            <button id="battleButton" class="battle-btn">multizazu</button>
-        </a>
+<a href="battle.html">
+    <button id="battleButton" class="battle-btn">Start Multiplayer Battle</button>
+</a>
 
         <div class="stats">
         <h3>Zazu's Stats</h3>
@@ -51,28 +51,33 @@
         </div>
 
         <script>
-            // ================== Multiplayer Battle System ==================
-// WebSocket variables
+            // Game state variables
+            let valor = 0;
+            let hunger = 100;
+            let thirst = 100;
+            let isAlive = true;
+            let statInterval;
+            let eventTimeout;
+            let isEventActive = false;
+            let debbieInterval;
+            const hungerDecay = 0.5;
+            const thirstDecay = 0.3;
 let socket;
 let roomId = null;
 let isHost = false;
-let opponentConnected = false;
 let inBattle = false;
 let battleClicks = 0;
 let opponentClicks = 0;
 let battleTimer = 30;
 let battleInterval;
 
-// Initialize WebSocket connection
 function initWebSocket() {
-  // For testing: ws://localhost:8080 (if running local server)
-  // For production: wss://your-websocket-server.com
-  const wsUrl = "ws://localhost:8080"; 
+  // Change this to your WebSocket server URL
+  const wsUrl = "ws://localhost:8080";
   socket = new WebSocket(wsUrl);
 
   socket.onopen = function() {
     console.log("Connected to battle server");
-    document.getElementById("battleButton").disabled = false;
   };
 
   socket.onmessage = function(event) {
@@ -83,12 +88,12 @@ function initWebSocket() {
       case "roomCreated":
         roomId = data.roomId;
         isHost = true;
-        showMessage(`Room created! ID: ${roomId} - Share this with your opponent`);
+        document.getElementById("roomIdDisplay").textContent = roomId;
+        document.getElementById("roomSection").style.display = "block";
         break;
         
       case "playerJoined":
-        opponentConnected = true;
-        showMessage("Opponent joined! Ready to battle");
+        document.getElementById("startBattleBtn").disabled = false;
         break;
         
       case "battleStarted":
@@ -103,45 +108,45 @@ function initWebSocket() {
       case "battleResult":
         endBattle(data.result);
         break;
-        
-      case "error":
-        showMessage(data.message);
-        break;
     }
-  };
-
-  socket.onclose = function() {
-    showMessage("Disconnected from server");
   };
 }
 
-// Battle functions
-function createBattleRoom() {
-  if (socket.readyState === WebSocket.OPEN) {
+function createRoom() {
+  if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify({ type: "createRoom" }));
+  } else {
+    alert("Not connected to server");
   }
 }
 
-function joinBattleRoom() {
-  const joinId = prompt("Enter Battle Room ID:");
-  if (joinId && socket.readyState === WebSocket.OPEN) {
+function joinRoom() {
+  const roomId = document.getElementById("roomIdInput").value;
+  if (roomId && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify({ 
       type: "joinRoom", 
-      roomId: joinId 
+      roomId: roomId 
     }));
   }
 }
 
 function startBattle() {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify({ 
+      type: "startBattle", 
+      roomId: roomId 
+    }));
+  }
+}
+
+function beginBattle() {
   inBattle = true;
   battleClicks = 0;
   opponentClicks = 0;
   battleTimer = 30;
   
+  document.getElementById("battleModal").style.display = "none";
   document.getElementById("battleArea").style.display = "block";
-  document.getElementById("battleButton").style.display = "none";
-  document.getElementById("playerClicks").textContent = "0";
-  document.getElementById("opponentClicks").textContent = "0";
   
   battleInterval = setInterval(() => {
     battleTimer--;
@@ -160,23 +165,35 @@ function endBattle(result) {
   if (!result) {
     result = battleClicks > opponentClicks ? "You win! +1000 points" : 
              battleClicks < opponentClicks ? "You lose!" : "It's a tie! +500 points";
-    
-    // Award points
     if (result.includes("win")) valor += 1000;
     if (result.includes("tie")) valor += 500;
     document.getElementById("contadas").textContent = valor;
   }
   
   document.getElementById("battleResult").textContent = result;
-  document.getElementById("battleButton").style.display = "block";
 }
 
+// Initialize WebSocket when battle button clicked
+document.getElementById("battleButton").addEventListener("click", function(e) {
+  e.preventDefault(); // Prevent link navigation
+  document.getElementById("battleModal").style.display = "block";
+  if (!socket) initWebSocket();
+});
+
+// Set up modal buttons
+document.getElementById("createRoomBtn").addEventListener("click", createRoom);
+document.getElementById("joinRoomBtn").addEventListener("click", function() {
+  document.getElementById("joinSection").style.display = "block";
+});
+document.getElementById("confirmJoinBtn").addEventListener("click", joinRoom);
+document.getElementById("startBattleBtn").addEventListener("click", startBattle);
+
 // Modify your click function
-function aumentarValor() {
+const originalClick = aumentarValor;
+aumentarValor = function() {
   if (inBattle) {
     battleClicks++;
     document.getElementById("playerClicks").textContent = battleClicks;
-    
     if (socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({
         type: "playerClick",
@@ -186,60 +203,8 @@ function aumentarValor() {
     }
     return;
   }
-  
-  // Original click logic
-  if (!isAlive) {
-    alert("Zazu needs food and water first!");
-    return;
-  }
-  
-  valor += 1;
-  meow();
-  hunger = Math.max(0, hunger - 1);
-  thirst = Math.max(0, thirst - 0.5);
-  document.getElementById("contadas").textContent = valor;
-  updateStats();
-}
-
-// Helper function
-function showMessage(msg) {
-  const msgEl = document.createElement("div");
-  msgEl.className = "battle-message";
-  msgEl.textContent = msg;
-  document.body.appendChild(msgEl);
-  setTimeout(() => msgEl.remove(), 3000);
-}
-
-// Initialize when page loads
-window.onload = function() {
-  loadGameState();
-  statInterval = setInterval(gameLoop, 1000);
-  playDalgona();
-  setTimeout(triggerRandomEvent, 60000);
-  atualizarDebbie();
-  initWebSocket(); // Initialize WebSocket connection
-  
-  // Battle button handler
-  document.getElementById("battleButton").addEventListener("click", function() {
-    if (confirm("Create new battle? (OK = Create Room, Cancel = Join Room)")) {
-      createBattleRoom();
-    } else {
-      joinBattleRoom();
-    }
-  });
+  originalClick();
 };
-
-            // Game state variables
-            let valor = 0;
-            let hunger = 100;
-            let thirst = 100;
-            let isAlive = true;
-            let statInterval;
-            let eventTimeout;
-            let isEventActive = false;
-            let debbieInterval;
-            const hungerDecay = 0.5;
-            const thirstDecay = 0.3;
             
 
             // Save game state to localStorage
@@ -528,7 +493,6 @@ window.onload = function() {
             // Save on page unload
             window.addEventListener("beforeunload", saveGameState);
         </script>
-        <script src="battle.js"></script>
     </header>
 </body>
 </html>

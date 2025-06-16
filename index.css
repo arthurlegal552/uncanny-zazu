@@ -7,6 +7,11 @@ body {
   overflow-x: hidden;
 }
 
+header {
+  position: relative;
+  z-index: 1;
+}
+
 ul {
   display: flex;
   justify-content: space-between;
@@ -151,6 +156,10 @@ img {
     }
 }
 
+#battleModal {
+  z-index: 1001; /* Slightly higher than battle UI */
+}
+
 /* Connection status indicator */
 .connection-status {
     position: fixed;
@@ -275,6 +284,7 @@ img {
   text-align: center;
   display: flex;
   justify-content: center;
+  z-index: 1;
 }
 
 /* Animation Styles */
@@ -410,6 +420,7 @@ img {
             background: rgba(255, 255, 255, 0.7);
             padding: 10px;
             border-radius: 10px;
+            z-index: 1;
         }
         .stat-bar {
             height: 20px;

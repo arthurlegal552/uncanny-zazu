@@ -199,6 +199,7 @@ function beginBattle() {
   
   // Hide modal and show battle UI
   document.getElementById("battleModal").style.display = "none";
+  document.getElementById("zazu").classList.add("battle-mode");
   
   // Create battle UI if it doesn't exist
   if (!document.getElementById("battleArea")) {
@@ -239,6 +240,7 @@ function beginBattle() {
 function endBattle(result) {
   clearInterval(battleInterval);
   inBattle = false;
+  document.getElementById("zazu").classList.remove("battle-mode");
   
   if (!result) {
     if (battleClicks > opponentClicks) {
@@ -384,6 +386,19 @@ document.getElementById("startBattleBtn").addEventListener("click", startBattle)
                     alert("Zazu needs food and water first!");
                     return;
                 }
+                    if (inBattle) {
+        battleClicks++;
+        document.getElementById("playerClicks").textContent = battleClicks;
+        if (conn && conn.open) {
+            conn.send({
+                type: "click",
+                count: battleClicks
+            });
+        }
+        // Still play the meow sound during battles
+        meow();
+        return; // Exit early during battles
+    }
                 
                 valor += 1;
                 meow();

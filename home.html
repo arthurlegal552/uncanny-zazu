@@ -90,70 +90,140 @@ let conn;
 let inBattle = false;
 let battleClicks = 0;
 let opponentClicks = 0;
+let roomId = null;
+let battleInterval;
 
+// Initialize PeerJS
 function initPeerJS() {
   // Create a random peer ID
   peer = new Peer(Math.random().toString(36).substring(2, 8));
   
   peer.on('open', (id) => {
-    document.getElementById("battleButton").disabled = false;
     console.log("PeerJS ready! ID:", id);
+    document.getElementById("battleButton").disabled = false;
   });
   
   peer.on('connection', (connection) => {
     conn = connection;
     setupConnection();
+    // Enable start battle button when second player joins
+    document.getElementById("startBattleBtn").disabled = false;
+    document.getElementById("playerCount").textContent = "2/2";
+  });
+
+  peer.on('error', (err) => {
+    console.error('PeerJS error:', err);
+    alert("Connection error: " + err.message);
   });
 }
 
-function connectToPeer(peerId) {
-  conn = peer.connect(peerId);
-  setupConnection();
-}
-
+// Set up connection handlers
 function setupConnection() {
   conn.on('open', () => {
-    alert("Connected to opponent!");
-    startBattle();
+    console.log("Connected to opponent!");
   });
   
   conn.on('data', (data) => {
     if (data.type === 'click') {
       opponentClicks = data.count;
-      document.getElementById("opponentClicks").textContent = opponentClicks;
+      updateBattleUI();
+    } else if (data.type === 'startBattle') {
+      beginBattle();
     }
+  });
+  
+  conn.on('close', () => {
+    alert("Opponent disconnected!");
+    endBattle("Opponent disconnected - you win by default! +500 points");
+  });
+  
+  conn.on('error', (err) => {
+    console.error('Connection error:', err);
+    alert("Connection error: " + err.message);
   });
 }
 
-// Modify your battle functions:
+// Create a new room
 function createRoom() {
-  const myId = peer.id;
-  document.getElementById("roomIdDisplay").textContent = myId;
+  roomId = peer.id;
+  document.getElementById("roomIdDisplay").textContent = roomId;
   document.getElementById("roomSection").style.display = "block";
-}
-
-function joinRoom() {
-  const peerId = document.getElementById("roomIdInput").value;
-  connectToPeer(peerId);
-}
-
-function startBattle() {
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify({ 
-      type: "startBattle", 
-      roomId: roomId 
-    }));
+  document.getElementById("joinSection").style.display = "none";
+  
+  // Initialize PeerJS if not already done
+  if (!peer) {
+    initPeerJS();
   }
 }
 
+// Join an existing room
+function joinRoom() {
+  const peerId = document.getElementById("roomIdInput").value.trim();
+  if (!peerId) {
+    alert("Please enter a room ID!");
+    return;
+  }
+  
+  roomId = peerId;
+  connectToPeer(peerId);
+}
+
+// Connect to another peer
+function connectToPeer(peerId) {
+  conn = peer.connect(peerId);
+  setupConnection();
+  
+  conn.on('open', () => {
+    document.getElementById("roomSection").style.display = "block";
+    document.getElementById("joinSection").style.display = "none";
+    document.getElementById("playerCount").textContent = "2/2";
+    document.getElementById("startBattleBtn").disabled = false;
+  });
+}
+
+// Start the battle
+function startBattle() {
+  if (conn && conn.open) {
+    conn.send({ type: 'startBattle' });
+    beginBattle();
+  } else {
+    alert("Not connected to opponent yet!");
+  }
+}
+
+// Begin the battle
 function beginBattle() {
   inBattle = true;
   battleClicks = 0;
   opponentClicks = 0;
-  battleTimer = 30;
   
+  // Hide modal and show battle UI
   document.getElementById("battleModal").style.display = "none";
-  document.getElementById("battleArea").style.display = "block";
+  
+  // Create battle UI if it doesn't exist
+  if (!document.getElementById("battleArea")) {
+    const battleUI = `
+      <div id="battleArea" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99; display:block; color:white; text-align:center; padding-top:100px;">
+        <h2>Battle in Progress!</h2>
+        <p>Time: <span id="battleTimer">30</span>s</p>
+        <p>Your clicks: <span id="playerClicks">0</span></p>
+        <p>Opponent clicks: <span id="opponentClicks">0</span></p>
+        <div id="battleResult" style="font-size:24px; margin-top:20px;"></div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', battleUI);
+  } else {
+    document.getElementById("battleArea").style.display = "block";
+  }
+  
+  // Reset UI
+  document.getElementById("playerClicks").textContent = "0";
+  document.getElementById("opponentClicks").textContent = "0";
+  document.getElementById("battleResult").textContent = "";
+  
+  // Set 30-second timer
+  let battleTimer = 30;
+  document.getElementById("battleTimer").textContent = battleTimer;
   
   battleInterval = setInterval(() => {
     battleTimer--;
@@ -165,59 +235,82 @@ function beginBattle() {
   }, 1000);
 }
 
+// End the battle
 function endBattle(result) {
   clearInterval(battleInterval);
   inBattle = false;
   
   if (!result) {
-    result = battleClicks > opponentClicks ? "You win! +1000 points" : 
-             battleClicks < opponentClicks ? "You lose!" : "It's a tie! +500 points";
-    if (result.includes("win")) valor += 1000;
-    if (result.includes("tie")) valor += 500;
+    if (battleClicks > opponentClicks) {
+      result = "You win! +1000 points";
+      valor += 1000;
+    } else if (battleClicks < opponentClicks) {
+      result = "You lose!";
+    } else {
+      result = "It's a tie! +500 points";
+      valor += 500;
+    }
     document.getElementById("contadas").textContent = valor;
   }
   
   document.getElementById("battleResult").textContent = result;
+  
+  // Hide battle area after 5 seconds
+  setTimeout(() => {
+    document.getElementById("battleArea").style.display = "none";
+  }, 5000);
 }
 
+// Update battle UI
+function updateBattleUI() {
+  document.getElementById("playerClicks").textContent = battleClicks;
+  document.getElementById("opponentClicks").textContent = opponentClicks;
+}
+
+// Modified click function for battles
+const originalClick = aumentarValor;
+aumentarValor = function() {
+  if (inBattle) {
+    battleClicks++;
+    document.getElementById("playerClicks").textContent = battleClicks;
+    if (conn && conn.open) {
+      conn.send({
+        type: "click",
+        count: battleClicks
+      });
+    }
+    return;
+  }
+  originalClick();
+};
+
+// Initialize PeerJS when page loads
+window.onload = function() {
+  loadGameState();
+  statInterval = setInterval(gameLoop, 1000);
+  playDalgona();
+  setTimeout(triggerRandomEvent, 60000);
+  atualizarDebbie();
+  initPeerJS(); // Initialize PeerJS
+};
+
+// Event listeners for multiplayer UI
 document.getElementById("battleButton").addEventListener("click", function(e) {
   e.preventDefault();
   document.getElementById("battleModal").style.display = "block";
-  if (!socket) initWebSocket();
 });
 
-// Add close button functionality
 document.querySelector(".close").addEventListener("click", function() {
   document.getElementById("battleModal").style.display = "none";
 });
 
-// Make sure these elements exist in your modal HTML:
 document.getElementById("createRoomBtn").addEventListener("click", createRoom);
 document.getElementById("joinRoomBtn").addEventListener("click", function() {
   document.getElementById("joinSection").style.display = "block";
   document.getElementById("roomSection").style.display = "none";
 });
 document.getElementById("confirmJoinBtn").addEventListener("click", joinRoom);
-document.getElementById("startBattleBtn").addEventListener("click", startBattle);
-
-// Modify your click function
-const originalClick = aumentarValor;
-aumentarValor = function() {
-  if (inBattle) {
-    battleClicks++;
-    document.getElementById("playerClicks").textContent = battleClicks;
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({
-        type: "playerClick",
-        roomId: roomId,
-        count: battleClicks
-      }));
-    }
-    return;
-  }
-  originalClick();
-};
-            
+document.getElementById("startBattleBtn").addEventListener("click", startBattle);  
 
             // Save game state to localStorage
             function saveGameState() {
@@ -500,6 +593,7 @@ aumentarValor = function() {
                 playDalgona();
                 setTimeout(triggerRandomEvent, 60000);
                 atualizarDebbie();
+                initPeerJS();
             };
 
             // Save on page unload

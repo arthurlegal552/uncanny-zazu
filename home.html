@@ -75,8 +75,8 @@
         <script>
             // Game state variables
             let valor = 0;
-            let hunger = 0;
-            let thirst = 0;
+            let hunger = 100;
+            let thirst = 100;
             let isAlive = true;
             let statInterval;
             let eventTimeout;
@@ -361,30 +361,39 @@ document.getElementById("startBattleBtn").addEventListener("click", startBattle)
 
             // Update stats display
             function updateStats() {
-                document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
-                document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
-                document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
-                document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
-                
-                // Check if Zazu is alive
-                if ((hunger <= 0 || thirst <= 0) && isAlive) {
-                    isAlive = false;
-                    document.getElementById("zazu").classList.add("disabled");
-                    alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
-                } else if (hunger > 0 && thirst > 0 && !isAlive) {
-                    isAlive = true;
-                    document.getElementById("zazu").classList.remove("disabled");
-                }
-                
-                saveGameState();
-            }
+    // Ensure hunger and thirst don't go below 0
+    hunger = Math.max(0, hunger);
+    thirst = Math.max(0, thirst);
+    
+    document.getElementById("hunger-value").textContent = hunger.toFixed(0);
+    document.getElementById("thirst-value").textContent = thirst.toFixed(0);
+    document.getElementById("hunger-fill").style.width = hunger + '%';
+    document.getElementById("thirst-fill").style.width = thirst + '%';
+    
+    // Check if Zazu is alive
+    if ((hunger <= 0 || thirst <= 0) && isAlive) {
+        isAlive = false;
+        document.getElementById("zazu").classList.add("disabled");
+        alert("Zazu is too hungry or thirsty to continue! Feed him to get more points!");
+    } else if (hunger > 0 && thirst > 0 && !isAlive) {
+        isAlive = true;
+        document.getElementById("zazu").classList.remove("disabled");
+    }
+    
+    saveGameState();
+}
 
             // Game loop for stat decay
-            function gameLoop() {
-                hunger = Math.max(0, hunger - hungerDecay);
-                thirst = Math.max(0, thirst - thirstDecay);
-                updateStats();
-            }
+           function gameLoop() {
+    // Only decrease stats if they're above 0
+    if (hunger > 0) {
+        hunger = Math.max(0, hunger - hungerDecay);
+    }
+    if (thirst > 0) {
+        thirst = Math.max(0, thirst - thirstDecay);
+    }
+    updateStats();
+}
 
             // Debbie's auto-clicker function
             function debbieAutoClick() {

@@ -75,8 +75,8 @@
         <script>
             // Game state variables
             let valor = 0;
-            let hunger = 100;
-            let thirst = 100;
+            let hunger = 0;
+            let thirst = 0;
             let isAlive = true;
             let statInterval;
             let eventTimeout;
@@ -361,14 +361,10 @@ document.getElementById("startBattleBtn").addEventListener("click", startBattle)
 
             // Update stats display
             function updateStats() {
-                // Ensure hunger and thirst don't go below 0
-                hunger = Math.max(0, hunger);
-                thirst = Math.max(0, thirst);
-                
-                document.getElementById("hunger-value").textContent = hunger.toFixed(0);
-                document.getElementById("thirst-value").textContent = thirst.toFixed(0);
-                document.getElementById("hunger-fill").style.width = hunger + '%';
-                document.getElementById("thirst-fill").style.width = thirst + '%';
+                document.getElementById("hunger-value").textContent = Math.max(0, hunger).toFixed(0);
+                document.getElementById("thirst-value").textContent = Math.max(0, thirst).toFixed(0);
+                document.getElementById("hunger-fill").style.width = Math.max(0, hunger) + '%';
+                document.getElementById("thirst-fill").style.width = Math.max(0, thirst) + '%';
                 
                 // Check if Zazu is alive
                 if ((hunger <= 0 || thirst <= 0) && isAlive) {

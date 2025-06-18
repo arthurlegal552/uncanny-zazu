@@ -39,8 +39,6 @@
 
     <div><strong>Inventário:</strong> <span id="inventario"></span></div>
 
-    <script src="shared.js"></script>
-
     <script>
         // Animation control variables
         let isTyping = false;
@@ -64,6 +62,20 @@
             atualizarInventario();
             startRandomDialogue();
         });
+
+        function getGameState() {
+    return {
+        valor: parseInt(localStorage.getItem("zazuClicker_valor")) || 0,
+        hunger: parseInt(localStorage.getItem("zazuClicker_hunger")),
+        thirst: parseInt(localStorage.getItem("zazuClicker_thirst"))
+    };
+}
+
+function updateGameState(newState) {
+    localStorage.setItem("zazuClicker_valor", newState.valor.toString());
+    localStorage.setItem("zazuClicker_hunger", newState.hunger.toString());
+    localStorage.setItem("zazuClicker_thirst", newState.thirst.toString());
+}
 
         function updateDebbieButton() {
             const debbieButton = document.getElementById("debbieButton");
@@ -230,6 +242,7 @@
             dalgona.currentTime = 0;
             dalgona.loop = true;
             dalgona.play();
+            updateGameState()
         }
 
         function playbuy() {

@@ -350,14 +350,19 @@ document.getElementById("startBattleBtn").addEventListener("click", startBattle)
 
             // Load game state from localStorage
             function loadGameState() {
-                valor = parseInt(localStorage.getItem("valor")) || 0;
-                hunger = parseInt(localStorage.getItem("zazuHunger")) || 100;
-                thirst = parseInt(localStorage.getItem("zazuThirst")) || 100;
-                
-                // Update UI with loaded values
-                document.getElementById("contadas").textContent = valor;
-                updateStats();
-            }
+    const saved = localStorage.getItem('zazuGameState');
+    if (saved) {
+        const gameState = JSON.parse(saved);
+        valor = gameState.valor || 0;
+        hunger = gameState.hunger || 100;
+        thirst = gameState.thirst || 100;
+        isAlive = gameState.isAlive !== false; // default to true
+        
+        // Update UI
+        document.getElementById("contadas").textContent = valor;
+        updateStats();
+    }
+}
 
             // Update stats display
             function updateStats() {

@@ -1,13 +1,21 @@
+// Shared game state functions
 function getGameState() {
-    return {
-        valor: parseInt(localStorage.getItem("zazuClicker_valor")) || 0,
-        hunger: parseInt(localStorage.getItem("zazuClicker_hunger")),
-        thirst: parseInt(localStorage.getItem("zazuClicker_thirst"))
+    const saved = localStorage.getItem('zazuGameState');
+    return saved ? JSON.parse(saved) : {
+        valor: 0,
+        hunger: 100,
+        thirst: 100,
+        isAlive: true
     };
 }
 
 function updateGameState(newState) {
-    localStorage.setItem("zazuClicker_valor", newState.valor.toString());
-    localStorage.setItem("zazuClicker_hunger", newState.hunger.toString());
-    localStorage.setItem("zazuClicker_thirst", newState.thirst.toString());
+    const current = getGameState();
+    const updated = {...current, ...newState};
+    localStorage.setItem('zazuGameState', JSON.stringify(updated));
+    return updated;
+}
+
+function resetGameState() {
+    localStorage.removeItem('zazuGameState');
 }

@@ -1,8 +1,8 @@
 function getGameState() {
     return {
         valor: parseInt(localStorage.getItem("zazuClicker_valor")) || 0,
-        hunger: parseInt(localStorage.getItem("zazuClicker_hunger")) || 100,
-        thirst: parseInt(localStorage.getItem("zazuClicker_thirst")) || 100
+        hunger: parseInt(localStorage.getItem("zazuClicker_hunger")),
+        thirst: parseInt(localStorage.getItem("zazuClicker_thirst"))
     };
 }
 
